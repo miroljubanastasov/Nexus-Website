@@ -91,7 +91,7 @@
   background-attachment: fixed;
   background-position: 50% 0px;
 
-  height: calc(100lvh - var(--nav-bar-size));
+  height: calc(100svh - var(--nav-bar-size));
   
   display: flex;
   align-items: center;
