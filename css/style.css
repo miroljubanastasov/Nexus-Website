@@ -87,11 +87,11 @@
   background-color: #333;
   background-image: url("../src/BG.png");
   background-repeat: no-repeat;
-  background-size:auto 100%;
+  background-size:cover;
   background-attachment: fixed;
   background-position: 50% 0px;
 
-  height: calc(100svh - var(--nav-bar-size));
+  height: calc(100lvh - var(--nav-bar-size));
   
   display: flex;
   align-items: center;
