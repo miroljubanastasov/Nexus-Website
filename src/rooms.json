@@ -1,0 +1,252 @@
+{
+  "master_bedroom": {
+    "name": "Master Bedroom",
+    "area": {
+      "1": 14,
+      "2": 16,
+      "3": 20
+    },
+    "description": "Primary bedroom for the couple.",
+    "category": "rooms"
+  },
+  "standard_bedroom": {
+    "name": "Standard Bedroom",
+    "area": {
+      "1": 9,
+      "2": 12,
+      "3": 14
+    },
+    "description": "Bedroom for additional family members.",
+    "category": "rooms"
+  },
+  "guest_bedroom": {
+    "name": "Guest Bedroom",
+    "area": {
+      "1": 10,
+      "2": 12,
+      "3": 14
+    },
+    "description": "Bedroom for guests.",
+    "category": "rooms"
+  },
+  "shared_bathroom": {
+    "name": "Shared Bathroom",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Bathroom shared by occupants.",
+    "category": "utilities"
+  },
+  "ensuite_bathroom": {
+    "name": "Ensuite Bathroom",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Bathroom connected to bedroom.",
+    "category": "utilities"
+  },
+  "powder_room": {
+    "name": "Powder Room",
+    "area": {
+      "1": 2,
+      "2": 2.5,
+      "3": 3
+    },
+    "description": "Small bathroom for guests.",
+    "category": "utilities"
+  },
+  "kitchen": {
+    "name": "Kitchen",
+    "area": {
+      "1": 8,
+      "2": 10,
+      "3": 14
+    },
+    "description": "Cooking and food preparation space.",
+    "category": "living spaces"
+  },
+  "living_room": {
+    "name": "Living Room",
+    "area": {
+      "1": 14,
+      "2": 20,
+      "3": 30
+    },
+    "description": "Main communal gathering room.",
+    "category": "living spaces"
+  },
+  "dining_room": {
+    "name": "Dining Room",
+    "area": {
+      "1": 8,
+      "2": 10,
+      "3": 12
+    },
+    "description": "Room for shared meals.",
+    "category": "living spaces"
+  },
+  "entrance_lobby": {
+    "name": "Entrance Lobby",
+    "area": {
+      "1": 4,
+      "2": 6,
+      "3": 8
+    },
+    "description": "Formal entry area.",
+    "category": "living spaces"
+  },
+  "technik_raum": {
+    "name": "Technik Raum",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Room for technical systems.",
+    "category": "utilities"
+  },
+  "combined_storage_laundry": {
+    "name": "Combined Storage & Laundry",
+    "area": {
+      "1": 6,
+      "2": 8,
+      "3": 10
+    },
+    "description": "Multifunction utility room.",
+    "category": "utilities"
+  },
+  "storage_room": {
+    "name": "Storage Room",
+    "area": {
+      "1": 3,
+      "2": 5,
+      "3": 6
+    },
+    "description": "General storage space.",
+    "category": "utilities"
+  },
+  "laundry_room": {
+    "name": "Laundry Room",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Dedicated laundry area.",
+    "category": "utilities"
+  },
+  "home_office": {
+    "name": "Home Office",
+    "area": {
+      "1": 6,
+      "2": 8,
+      "3": 10
+    },
+    "description": "Workspace at home.",
+    "category": "rooms"
+  },
+  "atelier": {
+    "name": "Atelier",
+    "area": {
+      "1": 8,
+      "2": 10,
+      "3": 12
+    },
+    "description": "Creative or art studio.",
+    "category": "rooms"
+  },
+  "garage": {
+    "name": "Garage",
+    "area": {
+      "1": 18,
+      "2": 20,
+      "3": 24
+    },
+    "description": "Vehicle parking space.",
+    "category": "utilities"
+  },
+  "sauna": {
+    "name": "Sauna",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Dry or steam heat room.",
+    "category": "rooms"
+  },
+  "jacuzzi": {
+    "name": "Jacuzzi",
+    "area": {
+      "1": 0,
+      "2": 0,
+      "3": 4
+    },
+    "description": "Heated whirlpool tub.",
+    "category": "rooms"
+  },
+  "stairs": {
+    "name": "Stairs",
+    "area": {
+      "1": 0,
+      "2": 5,
+      "3": 7
+    },
+    "description": "Internal vertical access.",
+    "category": "utilities"
+  },
+  "master_bathroom": {
+    "name": "Master Bathroom",
+    "area": {
+      "1": 5,
+      "2": 6,
+      "3": 8
+    },
+    "description": "Private ensuite bathroom for the master bedroom.",
+    "category": "utilities"
+  },
+  "ensuite": {
+    "name": "Ensuite",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Private bathroom for individual bedrooms or guest rooms.",
+    "category": "utilities"
+  },
+  "primary_bathroom": {
+    "name": "Primary Bathroom",
+    "area": {
+      "1": 5,
+      "2": 6,
+      "3": 7
+    },
+    "description": "Main shared bathroom in the dwelling.",
+    "category": "utilities"
+  },
+  "secondary_bathroom": {
+    "name": "Secondary Bathroom",
+    "area": {
+      "1": 4,
+      "2": 5,
+      "3": 6
+    },
+    "description": "Additional shared bathroom to support more occupants.",
+    "category": "utilities"
+  },
+  "powder_room": {
+    "name": "Powder Room",
+    "area": {
+      "1": 2,
+      "2": 2.5,
+      "3": 3
+    },
+    "description": "Small toilet room for guests or additional hygiene support.",
+    "category": "utilities"
+  }
+}
