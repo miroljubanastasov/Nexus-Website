@@ -115,7 +115,7 @@ async function runBrief() {
     area.innerHTML = `<strong>Area:</strong> ${room.Area.Value ?? "n/a"} m²`;
 
     const desc = document.createElement("p");
-    desc.className = "card-text text-muted w-50 mb-1";
+    desc.className = "card-text text-muted mb-1";
     desc.innerHTML = `<strong></strong> ${room.Description.Value ?? "No description provided"}`;
 
     const price = document.createElement("p");
@@ -169,7 +169,7 @@ async function runBrief() {
         area.innerHTML = `<strong>Area:</strong> ${nestedRoom.Area.Value ?? "n/a"} m²`;
 
         const desc = document.createElement("p");
-        desc.className = "card-text text-muted w-50 mb-1";
+        desc.className = "card-text text-muted mb-1";
         desc.innerHTML = `<strong></strong> ${nestedRoom.Description.Value ?? "No description provided"}`;
 
         const price = document.createElement("p");
