@@ -1,252 +1,1718 @@
-{
-  "master_bedroom": {
-    "name": "Master Bedroom",
-    "area": {
-      "1": 14,
-      "2": 16,
-      "3": 20
+[
+  {
+    "Room ID": "MBR",
+    "ID": "MBR01",
+    "Name": "Master Bedroom",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Minimal master bedroom. The bathroom is shared",
+      "Report": false
     },
-    "description": "Primary bedroom for the couple.",
-    "category": "rooms"
+    "Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "160x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    }
   },
-  "standard_bedroom": {
-    "name": "Standard Bedroom",
-    "area": {
-      "1": 9,
-      "2": 12,
-      "3": 14
+  {
+    "Room ID": "MBR",
+    "ID": "MBR02",
+    "Name": "Master Bedroom",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "Small master bedroom with ensuite bathroom",
+      "Report": false
     },
-    "description": "Bedroom for additional family members.",
-    "category": "rooms"
+    "Area": {
+      "Value": 16,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": true,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "180x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    }
   },
-  "guest_bedroom": {
-    "name": "Guest Bedroom",
-    "area": {
-      "1": 10,
-      "2": 12,
-      "3": 14
+  {
+    "Room ID": "MBR",
+    "ID": "MBR03",
+    "Name": "Master Bedroom",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Large master bedroom with ensuite bathroom and walk in closet",
+      "Report": false
     },
-    "description": "Bedroom for guests.",
-    "category": "rooms"
+    "Area": {
+      "Value": 18,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": true,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "180x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": true,
+      "Report": false
+    }
   },
-  "shared_bathroom": {
-    "name": "Shared Bathroom",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "SBR",
+    "ID": "SBR01",
+    "Name": "Bedroom",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Bathroom shared by occupants.",
-    "category": "utilities"
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "90x200",
+      "Report": true
+    },
+    "Lounge Space": {
+      "Value": false,
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    },
+    "Workstation": {
+      "Value": 1,
+      "Report": true
+    }
   },
-  "ensuite_bathroom": {
-    "name": "Ensuite Bathroom",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "SBR",
+    "ID": "SBR02",
+    "Name": "Bedroom",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Bathroom connected to bedroom.",
-    "category": "utilities"
+    "Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "140x200",
+      "Report": true
+    },
+    "Lounge Space": {
+      "Value": false,
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    },
+    "Workstation": {
+      "Value": true,
+      "Report": true
+    }
   },
-  "powder_room": {
-    "name": "Powder Room",
-    "area": {
-      "1": 2,
-      "2": 2.5,
-      "3": 3
+  {
+    "Room ID": "SBR",
+    "ID": "SBR03",
+    "Name": "Bedroom",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Mulitfunctional room accomodating sleeping and receiving friends. Includes lounge area and workstation",
+      "Report": false
     },
-    "description": "Small bathroom for guests.",
-    "category": "utilities"
+    "Area": {
+      "Value": 14,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": true,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "140x200",
+      "Report": true
+    },
+    "Lounge Space": {
+      "Value": true,
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    },
+    "Workstation": {
+      "Value": true,
+      "Report": true
+    }
   },
-  "kitchen": {
-    "name": "Kitchen",
-    "area": {
-      "1": 8,
-      "2": 10,
-      "3": 14
+  {
+    "Room ID": "GBR",
+    "ID": "GBR01",
+    "Name": "Guest Room",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Cooking and food preparation space.",
-    "category": "living spaces"
+    "Area": {
+      "Value": 10,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "160x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    }
   },
-  "living_room": {
-    "name": "Living Room",
-    "area": {
-      "1": 14,
-      "2": 20,
-      "3": 30
+  {
+    "Room ID": "GBR",
+    "ID": "GBR02",
+    "Name": "Guest Room",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Main communal gathering room.",
-    "category": "living spaces"
+    "Area": {
+      "Value": 14,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "160x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    }
   },
-  "dining_room": {
-    "name": "Dining Room",
-    "area": {
-      "1": 8,
-      "2": 10,
-      "3": 12
+  {
+    "Room ID": "GBR",
+    "ID": "GBR03",
+    "Name": "Guest Room",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Large guest room for sleeping only, with ensuite bathroom",
+      "Report": false
     },
-    "description": "Room for shared meals.",
-    "category": "living spaces"
+    "Area": {
+      "Value": 16,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": true,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "180x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    }
   },
-  "entrance_lobby": {
-    "name": "Entrance Lobby",
-    "area": {
-      "1": 4,
-      "2": 6,
-      "3": 8
+  {
+    "Room ID": "PBR",
+    "ID": "PBR01",
+    "Name": "Elders Room",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Formal entry area.",
-    "category": "living spaces"
+    "Area": {
+      "Value": 10,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "160x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    },
+    "Lounge Space": {
+      "Value": false,
+      "Report": true
+    }
   },
-  "technik_raum": {
-    "name": "Technik Raum",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "PBR",
+    "ID": "PBR02",
+    "Name": "Elders Room",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Room for technical systems.",
-    "category": "utilities"
+    "Area": {
+      "Value": 14,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": false,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "160x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": false,
+      "Report": false
+    },
+    "Lounge Space": {
+      "Value": true,
+      "Report": true
+    }
   },
-  "combined_storage_laundry": {
-    "name": "Combined Storage & Laundry",
-    "area": {
-      "1": 6,
-      "2": 8,
-      "3": 10
+  {
+    "Room ID": "PBR",
+    "ID": "PBR03",
+    "Name": "Elders Room",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Multifunction utility room.",
-    "category": "utilities"
+    "Area": {
+      "Value": 16,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Ensuite Bathroom": {
+      "Value": true,
+      "Report": false
+    },
+    "Bed Size": {
+      "Value": "180x200",
+      "Report": true
+    },
+    "Walk in Closet": {
+      "Value": true,
+      "Report": false
+    },
+    "Lounge Space": {
+      "Value": true,
+      "Report": true
+    }
   },
-  "storage_room": {
-    "name": "Storage Room",
-    "area": {
-      "1": 3,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "MBT",
+    "ID": "MBT01",
+    "Name": "Master Bathroom Ensuite",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "General storage space.",
-    "category": "utilities"
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": "",
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "",
+      "Report": true
+    },
+    "Lavatory": {
+      "Value": "Single",
+      "Report": true
+    }
   },
-  "laundry_room": {
-    "name": "Laundry Room",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "MBT",
+    "ID": "MBT02",
+    "Name": "Master Bathroom Ensuite",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Dedicated laundry area.",
-    "category": "utilities"
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": true,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "110x90",
+      "Report": true
+    },
+    "Lavatory": {
+      "Value": "Single",
+      "Report": true
+    }
   },
-  "home_office": {
-    "name": "Home Office",
-    "area": {
-      "1": 6,
-      "2": 8,
-      "3": 10
+  {
+    "Room ID": "MBT",
+    "ID": "MBT03",
+    "Name": "Master Bathroom Ensuite",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Workspace at home.",
-    "category": "rooms"
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": true,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "160x90",
+      "Report": true
+    },
+    "Lavatory": {
+      "Value": "Double",
+      "Report": true
+    }
   },
-  "atelier": {
-    "name": "Atelier",
-    "area": {
-      "1": 8,
-      "2": 10,
-      "3": 12
+  {
+    "Room ID": "PBT",
+    "ID": "PBT01",
+    "Name": "Bathroom",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Creative or art studio.",
-    "category": "rooms"
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": 1,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "90x80",
+      "Report": true
+    }
   },
-  "garage": {
-    "name": "Garage",
-    "area": {
-      "1": 18,
-      "2": 20,
-      "3": 24
+  {
+    "Room ID": "PBT",
+    "ID": "PBT02",
+    "Name": "Bathroom",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Vehicle parking space.",
-    "category": "utilities"
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": true,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "110x90",
+      "Report": true
+    }
   },
-  "sauna": {
-    "name": "Sauna",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "PBT",
+    "ID": "PBT03",
+    "Name": "Bathroom",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Dry or steam heat room.",
-    "category": "rooms"
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": true,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "110x90",
+      "Report": true
+    }
   },
-  "jacuzzi": {
-    "name": "Jacuzzi",
-    "area": {
-      "1": 0,
-      "2": 0,
-      "3": 4
+  {
+    "Room ID": "SBT",
+    "ID": "SBT01",
+    "Name": "Bathroom",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Heated whirlpool tub.",
-    "category": "rooms"
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": false,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "90x80",
+      "Report": true
+    }
   },
-  "stairs": {
-    "name": "Stairs",
-    "area": {
-      "1": 0,
-      "2": 5,
-      "3": 7
+  {
+    "Room ID": "SBT",
+    "ID": "SBT02",
+    "Name": "Bathroom",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Internal vertical access.",
-    "category": "utilities"
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": false,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "90x80",
+      "Report": true
+    }
   },
-  "master_bathroom": {
-    "name": "Master Bathroom",
-    "area": {
-      "1": 5,
-      "2": 6,
-      "3": 8
+  {
+    "Room ID": "SBT",
+    "ID": "SBT03",
+    "Name": "Bathroom",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Private ensuite bathroom for the master bedroom.",
-    "category": "utilities"
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    },
+    "Bath Tub": {
+      "Value": false,
+      "Report": true
+    },
+    "Shower Size": {
+      "Value": "110x90",
+      "Report": true
+    }
   },
-  "ensuite": {
-    "name": "Ensuite",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "PRM",
+    "ID": "PRM01",
+    "Name": "Powder Room",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Basic WC",
+      "Report": false
     },
-    "description": "Private bathroom for individual bedrooms or guest rooms.",
-    "category": "utilities"
+    "Area": {
+      "Value": 2,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    }
   },
-  "primary_bathroom": {
-    "name": "Primary Bathroom",
-    "area": {
-      "1": 5,
-      "2": 6,
-      "3": 7
+  {
+    "Room ID": "PRM",
+    "ID": "PRM02",
+    "Name": "Powder Room",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Main shared bathroom in the dwelling.",
-    "category": "utilities"
+    "Area": {
+      "Value": 3,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    }
   },
-  "secondary_bathroom": {
-    "name": "Secondary Bathroom",
-    "area": {
-      "1": 4,
-      "2": 5,
-      "3": 6
+  {
+    "Room ID": "PRM",
+    "ID": "PRM03",
+    "Name": "Powder Room",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
     },
-    "description": "Additional shared bathroom to support more occupants.",
-    "category": "utilities"
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": true,
+      "Report": false
+    }
   },
-  "powder_room": {
-    "name": "Powder Room",
-    "area": {
-      "1": 2,
-      "2": 2.5,
-      "3": 3
+  {
+    "Room ID": "LIV",
+    "ID": "LIV01",
+    "Name": "Living Room",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Minimum space requirement. Minimum seatting requirements",
+      "Report": false
     },
-    "description": "Small toilet room for guests or additional hygiene support.",
-    "category": "utilities"
+    "Min Area": {
+      "Value": 14,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 3.5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "LIV",
+    "ID": "LIV02",
+    "Name": "Living Room",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 20,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 4,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "LIV",
+    "ID": "LIV03",
+    "Name": "Living Room",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Large room including additional reading/ cinema/ piano zone",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 30,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "DIN",
+    "ID": "DIN01",
+    "Name": "Dinning Room",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Part of the living room",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 9,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 1.5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "DIN",
+    "ID": "DIN02",
+    "Name": "Dinning Room",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 2,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "DIN",
+    "ID": "DIN03",
+    "Name": "Dinning Room",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Separate zone",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 15,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 2.5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "KCH",
+    "ID": "KCH01",
+    "Name": "Kitchen",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Combined with living and dinning. Minimal equipment and space requirement. Compact design",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 10,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 2,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    },
+    "Wine Cellar": {
+      "Value": false,
+      "Report": true
+    },
+    "Bar": {
+      "Value": false,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "KCH",
+    "ID": "KCH02",
+    "Name": "Kitchen",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "Optimal space requirement. ",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 14,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 2.5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    },
+    "Wine Cellar": {
+      "Value": false,
+      "Report": true
+    },
+    "Bar": {
+      "Value": true,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "KCH",
+    "ID": "KCH03",
+    "Name": "Kitchen",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Separate zone. Open plan kicthen. Social component added bar, wine cellar. Host small dinner parties. ",
+      "Report": false
+    },
+    "Min Area": {
+      "Value": 20,
+      "Report": false
+    },
+    "Area per person": {
+      "Value": 3.5,
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    },
+    "Wine Cellar": {
+      "Value": true,
+      "Report": true
+    },
+    "Bar": {
+      "Value": true,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "SPA",
+    "ID": "SPA01",
+    "Name": "Spa",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Small sauna, Maybe outdoor sauna?",
+      "Report": false
+    },
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Sauna": {
+      "Value": 1,
+      "Report": true
+    },
+    "Jacuzzi": {
+      "Value": false,
+      "Report": true
+    },
+    "Plunge Pool": {
+      "Value": false,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "SPA",
+    "ID": "SPA02",
+    "Name": "Spa",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "Standard sauna",
+      "Report": false
+    },
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Sauna": {
+      "Value": true,
+      "Report": true
+    },
+    "Jacuzzi": {
+      "Value": true,
+      "Report": true
+    },
+    "Plunge Pool": {
+      "Value": false,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "SPA",
+    "ID": "SPA03",
+    "Name": "Spa",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Sauna with jacuzzi",
+      "Report": false
+    },
+    "Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    },
+    "Sauna": {
+      "Value": true,
+      "Report": true
+    },
+    "Jacuzzi": {
+      "Value": true,
+      "Report": true
+    },
+    "Plunge Pool": {
+      "Value": true,
+      "Report": true
+    }
+  },
+  {
+    "Room ID": "OFF",
+    "ID": "OFF01",
+    "Name": "Home Office",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "desk only",
+      "Report": false
+    },
+    "Area": {
+      "Value": 5,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "OFF",
+    "ID": "OFF02",
+    "Name": "Home Office",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "desk, lib",
+      "Report": false
+    },
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "OFF",
+    "ID": "OFF03",
+    "Name": "Home Office",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "Library, lounge, desk",
+      "Report": false
+    },
+    "Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ATE",
+    "ID": "ATE01",
+    "Name": "Atelier",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 5,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 1,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ATE",
+    "ID": "ATE02",
+    "Name": "Atelier",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ATE",
+    "ID": "ATE03",
+    "Name": "Atelier",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 12,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": 2,
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "SER",
+    "ID": "SER01",
+    "Name": "Services",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "Washmachine in the niche, storage part of the kicthen",
+      "Report": false
+    },
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "SER",
+    "ID": "SER02",
+    "Name": "Services",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "Combined loundary room and storage",
+      "Report": false
+    },
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "SER",
+    "ID": "SER03",
+    "Name": "Services",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "separate loundary room and storage",
+      "Report": false
+    },
+    "Area": {
+      "Value": 8,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    },
+    "Occupancy": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "TRA",
+    "ID": "TRA01",
+    "Name": "Technik Raum",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "TRA",
+    "ID": "TRA02",
+    "Name": "Technik Raum",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "TRA",
+    "ID": "TRA03",
+    "Name": "Technik Raum",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "STA",
+    "ID": "STA01",
+    "Name": "Stairs",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 10,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "STA",
+    "ID": "STA02",
+    "Name": "Stairs",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 16,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "STA",
+    "ID": "STA03",
+    "Name": "Stairs",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 18,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "GAR",
+    "ID": "GAR01",
+    "Name": "Garage",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "GAR",
+    "ID": "GAR02",
+    "Name": "Garage",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "GAR",
+    "ID": "GAR03",
+    "Name": "Garage",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ENT",
+    "ID": "ENT01",
+    "Name": "Entrance Lobby",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ENT",
+    "ID": "ENT02",
+    "Name": "Entrance Lobby",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 5,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "ENT",
+    "ID": "ENT03",
+    "Name": "Entrance Lobby",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "WIC",
+    "ID": "WIC01",
+    "Name": "Walk in Closet",
+    "Tier_ID": 1,
+    "Tier": "Compact - Efficient",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": "",
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "WIC",
+    "ID": "WIC02",
+    "Name": "Walk in Closet",
+    "Tier_ID": 2,
+    "Tier": "Standard - Balanced",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 4,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
+  },
+  {
+    "Room ID": "WIC",
+    "ID": "WIC03",
+    "Name": "Walk in Closet",
+    "Tier_ID": 3,
+    "Tier": "Spacious - Generous",
+    "Description": {
+      "Value": "",
+      "Report": false
+    },
+    "Area": {
+      "Value": 6,
+      "Report": false
+    },
+    "Price": {
+      "Value": "",
+      "Report": false
+    }
   }
-}
+]
