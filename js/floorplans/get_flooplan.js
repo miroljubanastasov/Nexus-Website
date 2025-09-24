@@ -148,6 +148,11 @@ async function computeFromSolution(solutionData, plotData) {
     }
 
     try {
+        // Ensure definition is loaded (lazy init for new flow)
+        if (!definition) {
+            const ok = await initializeDefinition();
+            if (!ok) throw new Error('Grasshopper definition not loaded');
+        }
         // Extract levels from solution data
         let levelsCount = 1;
         if (solutionData?.house?.grid_shape && Array.isArray(solutionData.house.grid_shape)) {
@@ -161,6 +166,8 @@ async function computeFromSolution(solutionData, plotData) {
 
         // Initialize progressive carousel
         svgManager.initializeProgressiveCarousel(levelsCount);
+        // Notify listeners that SVG generation is starting
+        window.dispatchEvent(new CustomEvent('nexus:svgInit', { detail: { levelsCount } }));
 
         // Generate SVG for each level
         for (let level = 0; level < levelsCount; level++) {
@@ -203,6 +210,9 @@ async function computeFromSolution(solutionData, plotData) {
                         .replace(/\r/g, '\n');
 
                     console.log(`✅ SVG generated for ${displayTitle}`);
+                    // Emit event for caching
+                    window.dispatchEvent(new CustomEvent('nexus:svgLevel', { detail: { level, title: displayTitle, svgContent } }));
+                    // Render into carousel
                     loadSvgIntoCarousel(level, svgContent, displayTitle);
                 } else {
                     console.warn(`⚠️ No SVG data for ${displayTitle}`);
@@ -214,6 +224,8 @@ async function computeFromSolution(solutionData, plotData) {
             }
         }
 
+        // Notify completion
+        window.dispatchEvent(new CustomEvent('nexus:svgDone'));
         showStatus(`✅ All ${levelsCount} floor plan levels generated!`, 'success');
 
     } catch (error) {
@@ -406,29 +418,30 @@ function showStatus(message, type = 'info') {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
-    showStatus('Connecting to Rhino Compute server...', 'info');
-    const serverConnected = await testRhinoComputeConnection();
-    if (!serverConnected) return;
-
-    showStatus('Loading Grasshopper definition...', 'info');
-    const definitionLoaded = await initializeDefinition();
-    if (!definitionLoaded) {
-        showStatus('Failed to load Grasshopper definition.', 'danger');
-        return;
-    }
-
-    showStatus('Loading project data...', 'info');
-    const solutionLoaded = await loadSolutionData();
-    if (solutionLoaded) {
-        showStatus(`Ready to generate floor plans! Project has ${totalLevels} levels.`, 'success');
-    } else {
-        showStatus('Ready to generate floor plans! (Using default configuration)', 'success');
-    }
-
-    document.getElementById('generateBtn').addEventListener('click', async (event) => {
+    // Legacy init path remains available via old generate button
+    document.getElementById('generateBtn')?.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
         try {
+            showStatus('Connecting to Rhino Compute server...', 'info');
+            const serverConnected = await testRhinoComputeConnection();
+            if (!serverConnected) return;
+
+            showStatus('Loading Grasshopper definition...', 'info');
+            const definitionLoaded = await initializeDefinition();
+            if (!definitionLoaded) {
+                showStatus('Failed to load Grasshopper definition.', 'danger');
+                return;
+            }
+
+            showStatus('Loading project data...', 'info');
+            const solutionLoaded = await loadSolutionData();
+            if (solutionLoaded) {
+                showStatus(`Ready to generate floor plans! Project has ${totalLevels} levels.`, 'success');
+            } else {
+                showStatus('Ready to generate floor plans! (Using default configuration)', 'success');
+            }
+
             if (definition) {
                 await compute();
             } else {
@@ -436,6 +449,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (error) {
             showStatus('Error: ' + (error.message || error), 'danger');
+        }
+    });
+
+    // Listen for request to display already-saved SVGs from a project import
+    window.addEventListener('nexus:displaySvgs', (e) => {
+        const svgs = e.detail?.svgs;
+        if (!Array.isArray(svgs) || svgs.length === 0) return;
+        try {
+            window.showCanvas?.();
+            svgManager.showLoading();
+            const levelsCount = svgs.length;
+            svgManager.initializeProgressiveCarousel(levelsCount);
+            // Render in order
+            svgs
+                .slice()
+                .sort((a, b) => (a.level ?? 0) - (b.level ?? 0))
+                .forEach(({ level, title, svgContent }) => {
+                    const displayTitle = title || (level === 0 ? 'Ground Floor' : `Level ${level}`);
+                    loadSvgIntoCarousel(level ?? 0, svgContent, displayTitle);
+                });
+            showStatus('Floor plans loaded from saved SVGs.', 'success');
+        } catch (err) {
+            console.error('Failed to display saved SVGs:', err);
+            showStatus('Error displaying saved SVGs.', 'danger');
         }
     });
 });

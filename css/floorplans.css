@@ -4,7 +4,7 @@
     --color-ink: #3d3d3d;
     --color-muted: grey;
     --color-light: rgb(187, 187, 187);
-    --color-ultra-light: rgba(0, 0, 0, 0.04);
+    --color-ultra-light: rgba(0, 0, 0, 0.03);
     --color-highlight: #96d64334;
 
     --wall-fill: var(--color-light);

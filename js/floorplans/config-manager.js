@@ -8,6 +8,9 @@ class ConfigManager {
         this.form = document.getElementById('configForm');
         this.currentSolution = null; // Store the current solution
         this.currentPlotData = null; // Store the plot data used for the solution
+        this.currentBriefData = null; // Store the brief data used for the solution
+        this.currentSVGs = [];      // Store generated SVGs [{level,title,svgContent}]
+        this.currentLevelsCount = 0; // Track levels count for current SVG set
         this.computeFromSolution = null; // Store the compute function reference
         this.initializeEventListeners();
     }
@@ -31,39 +34,35 @@ class ConfigManager {
             this.generateFloorPlanFromSolution();
         });
 
-        // Legacy generate button (for backward compatibility)
-        document.getElementById('generateFromConfigBtn')?.addEventListener('click', () => {
-            this.generateFloorPlan();
-        });
-
-        // Export configuration
-        document.getElementById('exportConfigBtn')?.addEventListener('click', () => {
-            this.exportConfiguration();
-        });
-
-        // Import configuration
-        document.getElementById('importConfigBtn')?.addEventListener('click', () => {
-            this.importConfiguration();
-        });
-
-        // Export solution
-        document.getElementById('exportSolutionBtn')?.addEventListener('click', () => {
-            this.exportSolution();
-        });
-
-        // Import solution
-        document.getElementById('importSolutionBtn')?.addEventListener('click', () => {
-            this.importSolution();
-        });
-
         // Export full project package
         document.getElementById('exportProjectBtn')?.addEventListener('click', () => {
             this.exportProject();
         });
 
+        // Import full project package
+        document.getElementById('importProjectBtn')?.addEventListener('click', () => {
+            this.importProject();
+        });
+
         // Form change validation
         this.form?.addEventListener('change', () => {
             this.validateConfiguration();
+        });
+
+        // Listen for SVG generation events to cache results for export
+        window.addEventListener('nexus:svgInit', (e) => {
+            this.currentSVGs = [];
+            this.currentLevelsCount = e.detail?.levelsCount ?? 0;
+        });
+        window.addEventListener('nexus:svgLevel', (e) => {
+            const { level, title, svgContent } = e.detail || {};
+            if (typeof level === 'number' && svgContent) {
+                this.currentSVGs.push({ level, title, svgContent });
+            }
+        });
+        window.addEventListener('nexus:svgDone', () => {
+            // Optionally sort by level to keep order consistent
+            this.currentSVGs.sort((a, b) => a.level - b.level);
         });
     }
 
@@ -575,6 +574,9 @@ class ConfigManager {
                 // Store the solution and plot data for floor plan generation
                 this.currentSolution = result.solution;
                 this.currentPlotData = plotJson;
+                this.currentBriefData = briefJson;
+                // Auto-open summary
+                this.updateHouseSummary(true);
 
                 // Show success and enable floor plan generation
                 this.showSolverStatus('House solved successfully! You can now generate the floor plan.', 'success');
@@ -582,7 +584,7 @@ class ConfigManager {
                 this.toggleGenerateButtons(true);
                 this.toggleSolutionExport(true);
                 this.toggleProjectExport(true);
-                this.updateHouseSummary();
+                // Already opened above
             } else {
                 console.log('❌ API Status: FAILED');
                 console.log('❌ Error:', result.error);
@@ -712,10 +714,9 @@ class ConfigManager {
      * Enable/disable export solution button
      */
     toggleSolutionExport(enabled) {
-        const btn = document.getElementById('exportSolutionBtn');
-        if (btn) {
-            btn.disabled = !enabled;
-        }
+        // No dedicated button anymore; keep for compatibility if present
+        const legacyBtn = document.getElementById('exportSolutionBtn');
+        if (legacyBtn) legacyBtn.disabled = !enabled;
     }
 
     toggleProjectExport(enabled) {
@@ -743,42 +744,88 @@ class ConfigManager {
      * Import existing solver solution (bypasses solving step)
      */
     importSolution() {
-        const input = document.getElementById('solutionFileInput');
+        // Kept for backward compatibility; delegate to importProject flow
+        this.importProject();
+    }
+
+    /**
+     * Import combined project (brief, plot, solution)
+     * Accepts either full package {brief, plot, solution} or legacy single objects
+     */
+    importProject() {
+        const input = document.getElementById('projectFileInput');
         if (!input) return;
         input.onchange = (event) => {
-            const file = event.target.files[0];
+            const file = event.target.files?.[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
                     const parsed = JSON.parse(e.target.result);
-                    // Accept raw solution or wrapped package {solution, brief, plot}
-                    let solutionObj = parsed;
-                    if (parsed && parsed.solution) {
-                        solutionObj = parsed.solution;
-                        // If brief & plot included, load them into form first
-                        if (parsed.brief && parsed.plot) {
-                            this.loadConfiguration({ brief: parsed.brief, plot: parsed.plot });
-                        }
-                    }
-                    if (typeof solutionObj !== 'object') throw new Error('Invalid solution structure');
-                    this.currentSolution = solutionObj;
-                    // Use embedded plot if present, else regenerate from form
-                    if (parsed.plot) {
-                        this.currentPlotData = parsed.plot;
+
+                    // Normalize to package shape
+                    let pkg = { brief: null, plot: null, solution: null, svgs: null };
+
+                    if (parsed && parsed.brief && parsed.plot) {
+                        pkg.brief = parsed.brief;
+                        pkg.plot = parsed.plot;
+                        pkg.solution = parsed.solution ?? null;
+                        pkg.svgs = parsed.svgs ?? null;
+                    } else if (parsed && parsed.solution) {
+                        // Solution-only file
+                        pkg.solution = parsed.solution;
+                    } else if (parsed && parsed.house) {
+                        // Raw solution JSON (top-level 'house' etc.)
+                        pkg.solution = parsed;
+                    } else if (parsed && parsed.north_angle && parsed.building_site_size) {
+                        // Raw plot JSON
+                        pkg.plot = parsed;
+                    } else if (parsed && (parsed.Bedrooms !== undefined)) {
+                        // Raw brief JSON
+                        pkg.brief = parsed;
                     } else {
-                        this.currentPlotData = this.generatePlotJson();
+                        throw new Error('Unrecognized project file structure');
                     }
-                    this.toggleGenerateButtons(true);
-                    this.toggleSolutionExport(true);
-                    this.toggleProjectExport(true);
-                    this.showSolverStatus('Solution imported. You can now generate the floor plan.', 'success');
-                    console.log('📥 Imported solution/package:', parsed);
-                    this.updateHouseSummary();
+
+                    // Load brief/plot into the form if provided
+                    if (pkg.brief || pkg.plot) {
+                        this.loadConfiguration({ brief: pkg.brief ?? this.generateBriefJson(), plot: pkg.plot ?? this.generatePlotJson() });
+                    }
+
+                    // If solution provided, set state and enable actions
+                    if (pkg.solution) {
+                        this.currentSolution = pkg.solution;
+                        this.currentPlotData = pkg.plot ?? this.generatePlotJson();
+                        this.currentBriefData = pkg.brief ?? this.generateBriefJson();
+                        this.toggleGenerateButtons(true);
+                        this.toggleProjectExport(true);
+                        this.toggleSolutionExport(true);
+                        this.updateHouseSummary(true);
+
+                        // If saved SVGs are included, render them directly without recomputation
+                        if (Array.isArray(pkg.svgs) && pkg.svgs.length > 0) {
+                            this.currentSVGs = pkg.svgs;
+                            // Dispatch event to display SVGs via svg-manager in get_flooplan
+                            window.dispatchEvent(new CustomEvent('nexus:displaySvgs', { detail: { svgs: this.currentSVGs } }));
+                            this.showSolverStatus('Loaded saved floor plans from project file.', 'success');
+                        } else {
+                            this.showSolverStatus('Project imported. You can now generate or export.', 'success');
+                        }
+                    } else {
+                        // No solution given: allow solving with loaded config
+                        this.currentSolution = null;
+                        this.currentPlotData = pkg.plot ?? this.generatePlotJson();
+                        this.currentBriefData = pkg.brief ?? this.generateBriefJson();
+                        this.toggleGenerateButtons(false);
+                        this.toggleProjectExport(false);
+                        this.toggleSolutionExport(false);
+                        this.showSolverStatus('Configuration imported. Solve to create a solution.', 'info');
+                    }
+
+                    console.log('📥 Imported project:', parsed);
                 } catch (err) {
-                    alert('Error parsing solution file: ' + err.message);
+                    alert('Error parsing project file: ' + err.message);
                 } finally {
-                    // Reset input so same file can be re-selected
                     input.value = '';
                 }
             };
@@ -797,9 +844,10 @@ class ConfigManager {
         }
         const packageObj = {
             exported_at: new Date().toISOString(),
-            brief: this.generateBriefJson(),
-            plot: this.generatePlotJson(),
-            solution: this.currentSolution
+            brief: this.currentBriefData ?? this.generateBriefJson(),
+            plot: this.currentPlotData ?? this.generatePlotJson(),
+            solution: this.currentSolution,
+            svgs: this.currentSVGs && this.currentSVGs.length ? this.currentSVGs : undefined
         };
         const dataStr = JSON.stringify(packageObj, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
@@ -825,7 +873,7 @@ class ConfigManager {
     /**
      * Update / reveal House Summary accordion based on currentSolution.summary
      */
-    updateHouseSummary() {
+    updateHouseSummary(autoOpen = false) {
         const summaryItem = document.getElementById('houseSummaryItem');
         const summaryContainer = document.getElementById('houseSummaryContent');
         if (!summaryItem || !summaryContainer) return;
@@ -837,6 +885,25 @@ class ConfigManager {
 
         // Reveal accordion item if hidden
         summaryItem.classList.remove('d-none');
+
+        // Auto-open the collapse if requested
+        if (autoOpen) {
+            const collapseEl = document.getElementById('summaryCollapse');
+            const btnEl = summaryItem.querySelector('button.accordion-button');
+            try {
+                if (collapseEl) {
+                    if (window.bootstrap && window.bootstrap.Collapse) {
+                        const instance = window.bootstrap.Collapse.getOrCreateInstance(collapseEl, { toggle: false });
+                        instance.show();
+                    } else {
+                        collapseEl.classList.add('show');
+                    }
+                }
+                if (btnEl) btnEl.setAttribute('aria-expanded', 'true');
+            } catch (_) {
+                // no-op fallback
+            }
+        }
 
         const s = this.currentSolution.house.summary;
         // Build summary table-like layout

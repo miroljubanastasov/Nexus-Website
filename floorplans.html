@@ -309,28 +309,17 @@
                         <i class="fas fa-play me-2"></i>Generate Floor Plan
                     </button>
                     <hr class="my-3">
-                    <button type="button" class="btn btn-outline-secondary" id="exportConfigBtn">
-                        <i class="fas fa-download me-2"></i>Export Configuration
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" id="importConfigBtn">
-                        <i class="fas fa-upload me-2"></i>Import Configuration
-                    </button>
-                    <hr class="my-3">
-                    <button type="button" class="btn btn-outline-secondary" id="exportSolutionBtn" disabled>
-                        <i class="fas fa-download me-2"></i>Export Solution
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" id="importSolutionBtn">
-                        <i class="fas fa-upload me-2"></i>Import Solution
-                    </button>
                     <button type="button" class="btn btn-outline-secondary" id="exportProjectBtn" disabled>
-                        <i class="fas fa-archive me-2"></i>Export Project Package
+                        <i class="fas fa-archive me-2"></i>Export Project
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="importProjectBtn">
+                        <i class="fas fa-file-import me-2"></i>Import Project
                     </button>
                 </div>
             </form>
 
             <!-- Hidden file input for importing -->
-            <input type="file" id="configFileInput" accept=".json" style="display: none;">
-            <input type="file" id="solutionFileInput" accept=".json" style="display: none;">
+            <input type="file" id="projectFileInput" accept=".json" style="display: none;">
         </div>
 
         <!-- MAIN CONTENT AREA -->
