@@ -106,45 +106,15 @@ class SvgManager {
         const carouselContainer = document.createElement('div');
         carouselContainer.className = 'position-relative w-100 h-100';
 
-        // Create level indicator/title
-        const levelTitle = document.createElement('div');
-        levelTitle.className = 'level-title text-center mb-3';
-        levelTitle.innerHTML = `<h5 class="mb-0">${levelData[0].title}</h5>`;
-        carouselContainer.appendChild(levelTitle);
-
         // Create SVG display area
         const svgDisplayArea = document.createElement('div');
         svgDisplayArea.className = 'svg-display-area position-relative';
-        svgDisplayArea.style.height = 'calc(100% - 100px)'; // Leave space for controls
+        svgDisplayArea.style.height = '100%';
         carouselContainer.appendChild(svgDisplayArea);
 
-        // Create navigation controls if more than one level
+        // Simple side navigation buttons (overlaid) if more than one level
         if (levelData.length > 1) {
-            const navControls = document.createElement('div');
-            navControls.className = 'carousel-nav d-flex justify-content-between align-items-center mt-3';
-
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'btn btn-outline-primary btn-sm';
-            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Previous Level';
-            prevBtn.onclick = () => this.previousLevel();
-
-            // Level indicator
-            const levelIndicator = document.createElement('div');
-            levelIndicator.className = 'level-indicator';
-            const initialLevel = levelData.length > 0 && levelData[0].level === 0 ? "Ground" : "Level 1";
-            levelIndicator.innerHTML = `<small><span class="current-level">${initialLevel}</span> of ${levelData.length} levels</small>`;
-
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn btn-outline-primary btn-sm';
-            nextBtn.innerHTML = 'Next Level <i class="fas fa-chevron-right"></i>';
-            nextBtn.onclick = () => this.nextLevel();
-
-            navControls.appendChild(prevBtn);
-            navControls.appendChild(levelIndicator);
-            navControls.appendChild(nextBtn);
-            carouselContainer.appendChild(navControls);
+            this.createSideNavButtons(carouselContainer);
         }
 
         this.container.appendChild(carouselContainer);
@@ -165,18 +135,7 @@ class SvgManager {
         const levelData = this.carouselData[index];
         this.currentCarouselIndex = index;
 
-        // Update title
-        const titleElement = this.container.querySelector('.level-title h5');
-        if (titleElement) {
-            titleElement.textContent = levelData.title;
-        }
-
-        // Update level indicator
-        const currentLevelSpan = this.container.querySelector('.current-level');
-        if (currentLevelSpan) {
-            const displayPosition = index === 0 ? "Ground" : `Level ${index}`;
-            currentLevelSpan.textContent = displayPosition;
-        }
+        // Title & textual indicators removed per new minimal UI spec.
 
         // Load SVG into display area
         const displayArea = this.container.querySelector('.svg-display-area');
@@ -256,54 +215,21 @@ class SvgManager {
         const carouselContainer = document.createElement('div');
         carouselContainer.className = 'position-relative w-100 h-100';
 
-        // Create level indicator/title
-        const levelTitle = document.createElement('div');
-        levelTitle.className = 'level-title text-center mb-3';
-        levelTitle.innerHTML = `<h5 class="mb-0">Generating floor plans...</h5>`;
-        carouselContainer.appendChild(levelTitle);
-
         // Create SVG display area with loading spinner
         const svgDisplayArea = document.createElement('div');
         svgDisplayArea.className = 'svg-display-area position-relative d-flex align-items-center justify-content-center';
-        svgDisplayArea.style.height = 'calc(100% - 100px)'; // Leave space for controls
+        svgDisplayArea.style.height = '100%';
         svgDisplayArea.innerHTML = `
             <div class="text-center">
                 <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <p class="text-muted">Generating level 1 of ${totalLevels}...</p>
+                <p class="text-muted mb-0 small">Generating levels...</p>
             </div>
         `;
         carouselContainer.appendChild(svgDisplayArea);
-
-        // Create navigation controls (disabled initially)
         if (totalLevels > 1) {
-            const navControls = document.createElement('div');
-            navControls.className = 'carousel-nav d-flex justify-content-between align-items-center mt-3';
-
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'btn btn-outline-primary btn-sm';
-            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Previous Level';
-            prevBtn.onclick = () => this.previousLevel();
-            prevBtn.disabled = true;
-
-            // Level indicator
-            const levelIndicator = document.createElement('div');
-            levelIndicator.className = 'level-indicator';
-            levelIndicator.innerHTML = `<small><span class="current-level">Generating...</span> of ${totalLevels} levels</small>`;
-
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn btn-outline-primary btn-sm';
-            nextBtn.innerHTML = 'Next Level <i class="fas fa-chevron-right"></i>';
-            nextBtn.onclick = () => this.nextLevel();
-            nextBtn.disabled = true;
-
-            navControls.appendChild(prevBtn);
-            navControls.appendChild(levelIndicator);
-            navControls.appendChild(nextBtn);
-            carouselContainer.appendChild(navControls);
+            this.createSideNavButtons(carouselContainer, /*disabledInitially=*/true);
         }
 
         this.container.appendChild(carouselContainer);
@@ -333,24 +259,49 @@ class SvgManager {
             }
         }
 
-        // Update level indicator with current progress
-        const currentLevelSpan = this.container.querySelector('.current-level');
-        if (currentLevelSpan && currentCount === this.currentCarouselIndex + 1) {
-            // Update indicator for current level being viewed
-            const displayPosition = this.currentCarouselIndex === 0 ? "Ground" : `Level ${this.currentCarouselIndex}`;
-            currentLevelSpan.textContent = displayPosition;
-        }
-
-        // Update generation status if still generating
-        if (currentCount < this.totalExpectedLevels) {
-            const nextLevelNum = currentCount + 1;
-            const statusText = this.container.querySelector('.svg-display-area p');
-            if (statusText && statusText.textContent.includes('Generating')) {
-                statusText.textContent = `Generating level ${nextLevelNum} of ${this.totalExpectedLevels}...`;
-            }
-        }
+        // No textual level indicator per minimal UI; keep silent.
 
         return true;
+    }
+
+    /**
+     * Create side navigation buttons (left/right) over the SVG area
+     */
+    createSideNavButtons(wrapper, disabledInitially = false) {
+        // Ensure only one set exists
+        if (wrapper.querySelector('.level-nav-btn')) return;
+
+        const makeBtn = (direction) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `level-nav-btn ${direction}`;
+            btn.innerHTML = direction === 'left'
+                ? '<i class="fas fa-chevron-left"></i>'
+                : '<i class="fas fa-chevron-right"></i>';
+            btn.disabled = !!disabledInitially;
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (direction === 'left') this.previousLevel(); else this.nextLevel();
+            });
+            return btn;
+        };
+
+        const leftBtn = makeBtn('left');
+        const rightBtn = makeBtn('right');
+        wrapper.appendChild(leftBtn);
+        wrapper.appendChild(rightBtn);
+
+        // When levels are first fully loaded, enable buttons
+        if (!disabledInitially) return;
+        const observer = new MutationObserver(() => {
+            if (this.carouselData && this.carouselData.length > 0) {
+                leftBtn.disabled = false;
+                rightBtn.disabled = false;
+                observer.disconnect();
+            }
+        });
+        observer.observe(wrapper, { childList: true, subtree: true });
     }
 
     /**

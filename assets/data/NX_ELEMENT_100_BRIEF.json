@@ -1,0 +1,13 @@
+{
+  "Bedrooms": 2,
+  "Guest": false,
+  "Parents": false,
+  "Office": true,
+  "Library": false,
+  "Spa": false,
+  "LargeLivingRoom": false,
+  "DoubleHeightLivingRoom": true,
+  "DoubleHeightDiningRoom": false,
+  "CompactKitchen": false,
+  "Garden": true
+}

@@ -59,38 +59,298 @@
         </div>
     </nav>
 
-    <!-- PAGE CONTENT -->
-    <div class="container py-4">
-        <h1 class="mb-4">
-            Floor Plan Generator
-        </h1>
-        <p class="lead text-muted mb-4">Generate SVG floor plans using Rhino Compute server</p>
+    <!-- MAIN LAYOUT CONTAINER -->
+    <div class="d-flex" style="height: calc(100vh - 76px);">
+        <!-- SIDEBAR PANEL -->
+        <div class="sidebar-panel bg-light border-end p-3" style="width: 400px; overflow-y: auto;">
+            <form id="configForm">
+                <!-- BRIEF SECTION -->
+                <div class="accordion mb-4" id="configAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#briefCollapse" aria-expanded="true" aria-controls="briefCollapse">
+                                <i class="fas fa-clipboard-list me-2"></i>Project Brief
+                            </button>
+                        </h2>
+                        <div id="briefCollapse" class="accordion-collapse collapse show"
+                            data-bs-parent="#configAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label for="bedrooms" class="form-label">Bedrooms</label>
+                                        <input type="number" class="form-control" id="bedrooms" value="2" min="1"
+                                            max="5">
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch mt-4">
+                                            <input class="form-check-input" type="checkbox" id="guest">
+                                            <label class="form-check-label" for="guest">Guest Room</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="parents">
+                                            <label class="form-check-label" for="parents">Parents Room</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="office" checked>
+                                            <label class="form-check-label" for="office">Office</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="library">
+                                            <label class="form-check-label" for="library">Library</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="spa">
+                                            <label class="form-check-label" for="spa">Spa</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="largeLivingRoom">
+                                            <label class="form-check-label" for="largeLivingRoom">Large Living
+                                                Room</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="doubleHeightLivingRoom"
+                                                checked>
+                                            <label class="form-check-label" for="doubleHeightLivingRoom">Double Height
+                                                Living</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="doubleHeightDiningRoom">
+                                            <label class="form-check-label" for="doubleHeightDiningRoom">Double Height
+                                                Dining</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="compactKitchen">
+                                            <label class="form-check-label" for="compactKitchen">Compact Kitchen</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="garden" checked>
+                                            <label class="form-check-label" for="garden">Garden</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Action Button -->
-        <div class="text-center mb-4">
-            <button type="button" class="btn btn-primary btn-lg" id="generateBtn">
-                <i class="fas fa-play me-2"></i>
-                Generate Floor Plan
-            </button>
+                    <!-- PLOT SECTION -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#plotCollapse" aria-expanded="false" aria-controls="plotCollapse">
+                                <i class="fas fa-map me-2"></i>Site Configuration
+                            </button>
+                        </h2>
+                        <div id="plotCollapse" class="accordion-collapse collapse" data-bs-parent="#configAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="northAngle" class="form-label">North Angle (degrees)</label>
+                                        <input type="number" class="form-control" id="northAngle" value="220" min="0"
+                                            max="360">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="siteWidth" class="form-label">Site Width (m)</label>
+                                        <input type="number" class="form-control" id="siteWidth" value="15" min="5"
+                                            max="50" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="siteDepth" class="form-label">Site Depth (m)</label>
+                                        <input type="number" class="form-control" id="siteDepth" value="30" min="5"
+                                            max="50" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="maxModulesFootprint" class="form-label">Max Modules
+                                            (footprint)</label>
+                                        <input type="number" class="form-control" id="maxModulesFootprint" value="16"
+                                            min="4" max="30">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="maxModules" class="form-label">Max Modules (total)</label>
+                                        <input type="number" class="form-control" id="maxModules" value="24" min="4"
+                                            max="50">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="maxLevels" class="form-label">Max Levels</label>
+                                        <input type="number" class="form-control" id="maxLevels" value="2" min="1"
+                                            max="4">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="floorHeight" class="form-label">Floor Height (m)</label>
+                                        <input type="number" class="form-control" id="floorHeight" value="3.0" min="2.5"
+                                            max="4.0" step="0.1">
+                                    </div>
+
+                                    <!-- Setbacks -->
+                                    <div class="col-12">
+                                        <h6 class="mt-3">Setbacks (m)</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="setbackS" class="form-label">South</label>
+                                        <input type="number" class="form-control" id="setbackS" value="5.0" min="0"
+                                            max="20" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="setbackE" class="form-label">East</label>
+                                        <input type="number" class="form-control" id="setbackE" value="1.5" min="0"
+                                            max="20" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="setbackN" class="form-label">North</label>
+                                        <input type="number" class="form-control" id="setbackN" value="10.0" min="0"
+                                            max="20" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="setbackW" class="form-label">West</label>
+                                        <input type="number" class="form-control" id="setbackW" value="1.5" min="0"
+                                            max="20" step="0.5">
+                                    </div>
+
+                                    <!-- Access -->
+                                    <div class="col-12">
+                                        <h6 class="mt-3">Site Access</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="accessS" checked>
+                                            <label class="form-check-label" for="accessS">South Access</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="accessE">
+                                            <label class="form-check-label" for="accessE">East Access</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="accessN">
+                                            <label class="form-check-label" for="accessN">North Access</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="accessW">
+                                            <label class="form-check-label" for="accessW">West Access</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Neighbours Distance -->
+                                    <div class="col-12">
+                                        <h6 class="mt-3">Neighbours Distance (m)</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="neighbourS" class="form-label">South</label>
+                                        <input type="number" class="form-control" id="neighbourS" value="15.0" min="0"
+                                            max="50" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="neighbourE" class="form-label">East</label>
+                                        <input type="number" class="form-control" id="neighbourE" value="10.0" min="0"
+                                            max="50" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="neighbourN" class="form-label">North</label>
+                                        <input type="number" class="form-control" id="neighbourN" value="5.0" min="0"
+                                            max="50" step="0.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="neighbourW" class="form-label">West</label>
+                                        <input type="number" class="form-control" id="neighbourW" value="3.0" min="0"
+                                            max="50" step="0.5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HOUSE SUMMARY (appears after solution available) -->
+                    <div class="accordion-item d-none" id="houseSummaryItem">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#summaryCollapse" aria-expanded="false" aria-controls="summaryCollapse">
+                                <i class="fas fa-info-circle me-2"></i>House Summary
+                            </button>
+                        </h2>
+                        <div id="summaryCollapse" class="accordion-collapse collapse" data-bs-parent="#configAccordion">
+                            <div class="accordion-body">
+                                <div id="houseSummaryContent" class="small text-muted">
+                                    <em>No solution yet.</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary" id="solveHouseBtn">
+                        <i class="fas fa-cog me-2"></i>Solve House
+                    </button>
+                    <button type="button" class="btn btn-success" id="generateFloorPlanBtn" disabled>
+                        <i class="fas fa-play me-2"></i>Generate Floor Plan
+                    </button>
+                    <hr class="my-3">
+                    <button type="button" class="btn btn-outline-secondary" id="exportConfigBtn">
+                        <i class="fas fa-download me-2"></i>Export Configuration
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="importConfigBtn">
+                        <i class="fas fa-upload me-2"></i>Import Configuration
+                    </button>
+                    <hr class="my-3">
+                    <button type="button" class="btn btn-outline-secondary" id="exportSolutionBtn" disabled>
+                        <i class="fas fa-download me-2"></i>Export Solution
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="importSolutionBtn">
+                        <i class="fas fa-upload me-2"></i>Import Solution
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="exportProjectBtn" disabled>
+                        <i class="fas fa-archive me-2"></i>Export Project Package
+                    </button>
+                </div>
+            </form>
+
+            <!-- Hidden file input for importing -->
+            <input type="file" id="configFileInput" accept=".json" style="display: none;">
+            <input type="file" id="solutionFileInput" accept=".json" style="display: none;">
         </div>
 
-        <!-- SVG CANVAS CONTAINER -->
-        <div class="canvas-container hidden">
-            <button class="canvas-close-btn" onclick="closeCanvas()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="svgContainer">
-                <div class="text-center text-muted">
-                    <i class="fas fa-home fa-3x mb-3"></i>
-                    <p class="mb-0"></p>
-                    <small>Generating floor plan...</small>
+        <!-- MAIN CONTENT AREA -->
+        <div class="flex-grow-1 d-flex flex-column">
+            <!-- Canvas Area Only -->
+            <div class="flex-grow-1 p-2" style="overflow:hidden;">
+                <div class="canvas-container h-100 rounded bg-white d-flex align-items-center justify-content-center"
+                    style="min-height:400px;">
+                    <div id="svgContainer" class="w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div class="text-center text-muted small">
+                            <i class="fas fa-home fa-3x mb-3"></i>
+                            <p class="mb-0">Canvas Ready</p>
+                            <small>Run Solve + Generate to display plans</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- STATUS/ERROR MESSAGES -->
-        <div id="statusMessages" class="mt-3"></div>
-    </div>
+    </div> <!-- End main layout container -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -99,24 +359,77 @@
     <!-- Custom Scripts -->
     <script type="module" src="js/floorplans/get_flooplan.js"></script>
     <script type="module" src="js/floorplans/svg-manager.js"></script>
+    <script type="module" src="js/floorplans/config-manager.js"></script>
 
-    <script>
-        // Canvas management functions
+    <script type="module">
+        import ConfigManager from './js/floorplans/config-manager.js';
+        import { compute, computeFromSolution } from './js/floorplans/get_flooplan.js';
+
+        // Initialize configuration manager
+        let configManager;
+
+        // Canvas management functions (updated for fixed layout)
         function showCanvas() {
-            document.querySelector('.canvas-container').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent scroll
+            const container = document.querySelector('.canvas-container');
+            container.classList.add('has-content');
+            // No need to hide/show in fixed layout - canvas is always visible
         }
 
         function closeCanvas() {
-            document.querySelector('.canvas-container').classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Restore scroll
+            const container = document.querySelector('.canvas-container');
+            container.classList.remove('has-content');
+            const svgContainer = document.getElementById('svgContainer');
+            if (svgContainer) {
+                svgContainer.innerHTML = `
+                    <div class="text-center text-muted">
+                        <i class="fas fa-home fa-3x mb-3"></i>
+                        <p class="mb-0">Floor Plan Viewer</p>
+                        <small>Configure and solve house to generate floor plan</small>
+                    </div>
+                `;
+            }
+        }
+
+        // Global function to hide solution display
+        function hideSolution() {
+            const solutionDisplay = document.getElementById('solutionDisplay');
+            if (solutionDisplay) {
+                solutionDisplay.style.display = 'none';
+            }
         }
 
         // Make functions available globally
         window.showCanvas = showCanvas;
         window.closeCanvas = closeCanvas;
-    </script>
+        window.hideSolution = hideSolution;
 
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            configManager = new ConfigManager();
+            // Pass the computeFromSolution function to the config manager
+            configManager.setComputeFunction(computeFromSolution);
+
+            // Legacy event listener - disabled since we now use direct button approach
+            // document.addEventListener('generateFloorPlan', async (event) => {
+            //     const eventData = event.detail;
+            //     console.log('🎯 Received generateFloorPlan event:', eventData);
+
+            //     try {
+            //         if (eventData.solution && eventData.plot) {
+            //             // New flow: use solver solution
+            //             console.log('🔄 Using solver solution for floor plan generation');
+            //             await computeFromSolution(eventData.solution, eventData.plot);
+            //         } else {
+            //             // Fallback: use old method with hardcoded files
+            //             console.log('🔄 Using fallback method with hardcoded files');
+            //             await compute();
+            //         }
+            //     } catch (error) {
+            //         console.error('💥 Error generating floor plan:', error);
+            //     }
+            // });
+        });
+    </script>
 </body>
 
 </html>

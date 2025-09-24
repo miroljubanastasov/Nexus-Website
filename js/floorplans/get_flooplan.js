@@ -9,7 +9,23 @@ RhinoCompute.url = 'http://localhost:5000/'
 const svgManager = new SvgManager('svgContainer');
 
 function loadSvgIntoCarousel(level, svgContent, displayTitle) {
-    console.log(`Attempting to parse SVG for ${displayTitle}, content length: ${svgContent.length}`);
+    console.log(`Attempting to parse SVG for    // Attach event listener only if the generateBtn exists (for backward compatibility)
+    const legacyGenerateBtn = document.getElementById('generateBtn');
+    if (legacyGenerateBtn) {
+        legacyGenerateBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            try {
+                if (definition) {
+                    await compute();
+                } else {
+                    showStatus('Grasshopper definition not loaded. Please refresh the page.', 'danger');
+                }
+            } catch (error) {
+                showStatus('Error generating floor plan: ' + (error.message || error), 'danger');
+            }
+        });
+    }le}, content length: ${svgContent.length}`);
     console.log(`First 200 chars of SVG:`, svgContent.substring(0, 200));
 
     const parser = new DOMParser();
@@ -113,14 +129,116 @@ async function loadSolutionData() {
     }
 }
 
-async function compute() {
+/**
+ * Compute floor plans from solver solution (new method)
+ * @param {Object} solutionData - Solution JSON from solver API
+ * @param {Object} plotData - Plot JSON from configuration
+ */
+async function computeFromSolution(solutionData, plotData) {
+    console.log('🏗️ Computing floor plans from solver solution...');
+
     // Prevent page unload while generation is in progress
     const beforeUnload = (e) => { e.preventDefault(); e.returnValue = ''; };
     window.addEventListener('beforeunload', beforeUnload);
 
-    // Disable generate button during processing
+    // Disable generate button during processing (if it exists)
     const generateBtn = document.getElementById('generateBtn');
-    generateBtn.disabled = true;
+    if (generateBtn) {
+        generateBtn.disabled = true;
+    }
+
+    try {
+        // Extract levels from solution data
+        let levelsCount = 1;
+        if (solutionData?.house?.grid_shape && Array.isArray(solutionData.house.grid_shape)) {
+            levelsCount = solutionData.house.grid_shape[2] || 1;
+        }
+
+        // Show fullscreen canvas
+        window.showCanvas();
+        svgManager.showLoading();
+        showStatus(`Generating ${levelsCount} floor plan levels...`, 'info');
+
+        // Initialize progressive carousel
+        svgManager.initializeProgressiveCarousel(levelsCount);
+
+        // Generate SVG for each level
+        for (let level = 0; level < levelsCount; level++) {
+            showStatus(`Generating Level ${level} of ${levelsCount} levels...`, 'info');
+
+            // Prepare Grasshopper DataTrees with actual data (not file paths)
+            let param1 = new RhinoCompute.Grasshopper.DataTree('SOLUTION_JSON');
+            param1.append([0], [JSON.stringify(solutionData)]);
+
+            let param2 = new RhinoCompute.Grasshopper.DataTree('PLOT_JSON');
+            param2.append([0], [JSON.stringify(plotData)]);
+
+            let param3 = new RhinoCompute.Grasshopper.DataTree('LEVEL');
+            param3.append([0], [level]);
+
+            let param4 = new RhinoCompute.Grasshopper.DataTree('MODULES_FILE_PATH');
+            param4.append([0], [data.inputs.MODULES_FILE_PATH]);
+
+            let trees = [param1, param2, param3, param4];
+
+            // Call Rhino Compute
+            let res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, trees);
+
+            if (res && res.values && res.values.length > 0) {
+                const displayTitle = level === 0 ? "Ground Floor" : `Level ${level}`;
+
+                // Extract SVG string from response
+                let svgParam = res.values.find(param => param.ParamName === 'SVG_STRING') ||
+                    res.values.find(param => param.ParamName === 'SVG') ||
+                    res.values[0];
+
+                if (svgParam?.InnerTree?.['{0;0}']?.length > 0) {
+                    const svgStringRaw = svgParam.InnerTree['{0;0}'][0].data;
+                    const svgContent = svgStringRaw
+                        .replace(/\\"/g, '"')
+                        .replace(/^"|"$/g, '')
+                        .replace(/\\r\\n/g, '\n')
+                        .replace(/\\n/g, '\n')
+                        .replace(/\r\n/g, '\n')
+                        .replace(/\r/g, '\n');
+
+                    console.log(`✅ SVG generated for ${displayTitle}`);
+                    loadSvgIntoCarousel(level, svgContent, displayTitle);
+                } else {
+                    console.warn(`⚠️ No SVG data for ${displayTitle}`);
+                    showStatus(`Warning: No SVG data for Level ${level}`, 'warning');
+                }
+            } else {
+                console.warn(`⚠️ Generation failed for Level ${level}`);
+                showStatus(`Warning: Level ${level} generation failed`, 'warning');
+            }
+        }
+
+        showStatus(`✅ All ${levelsCount} floor plan levels generated!`, 'success');
+
+    } catch (error) {
+        console.error('💥 Error generating floor plans:', error);
+        showStatus('Error generating floor plan: ' + (error.message || error), 'danger');
+        svgManager.showError(error.message || String(error));
+    } finally {
+        if (generateBtn) {
+            generateBtn.disabled = false;
+        }
+        window.removeEventListener('beforeunload', beforeUnload);
+    }
+}
+
+async function compute() {
+    // Original compute function - kept for backward compatibility
+    // Prevent page unload while generation is in progress
+    const beforeUnload = (e) => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', beforeUnload);
+
+    // Disable generate button during processing (if it exists)
+    const generateBtn = document.getElementById('generateBtn');
+    if (generateBtn) {
+        generateBtn.disabled = true;
+    }
 
     try {
         // Show fullscreen canvas
@@ -201,7 +319,9 @@ async function compute() {
         showStatus('Error generating floor plan: ' + (error.message || error), 'danger');
         svgManager.showError(error.message || String(error));
     } finally {
-        generateBtn.disabled = false; // Re-enable button
+        if (generateBtn) {
+            generateBtn.disabled = false; // Re-enable button
+        }
         window.removeEventListener('beforeunload', beforeUnload);
     }
 }
@@ -253,6 +373,10 @@ async function loadLevelIntoCarousel(level, filename, title) {
 // UI Helper functions
 function showStatus(message, type = 'info') {
     const statusContainer = document.getElementById('statusMessages');
+    if (!statusContainer) {
+        // Silently skip if status area removed (clean canvas mode)
+        return;
+    }
     const alertClass = `alert-${type}`;
     const iconClass = {
         'success': 'fa-check-circle',
@@ -316,4 +440,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-export { compute, data, testSVGAccess, loadLevelIntoCarousel, loadSvgIntoCarousel, loadSolutionData };
+export { compute, computeFromSolution, data, testSVGAccess, loadLevelIntoCarousel, loadSvgIntoCarousel, loadSolutionData };
