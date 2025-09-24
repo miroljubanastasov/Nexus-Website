@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="2400pt" height="2400pt" viewBox="0 0 2400 2400" xmlns="http://www.w3.org/2000/svg">
+  <defs />
+  <g id="200_ANNO">
+    <g id="200_ANNO::200_GRID">
+      <path d="M1537.5,1860 L1537.5,1800 L1537.5,900 L1537.5,840" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M1312.5,1860 L1312.5,1800 L1312.5,900 L1312.5,840" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M1087.5,1860 L1087.5,1800 L1087.5,900 L1087.5,840" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M802.5,1800 L862.5,1800 L1537.5,1800 L1597.5,1800" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M802.5,1575 L862.5,1575 L1537.5,1575 L1597.5,1575" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M802.5,1350 L862.5,1350 L1537.5,1350 L1597.5,1350" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M802.5,1125 L862.5,1125 L1537.5,1125 L1597.5,1125" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M862.5,840 L862.5,900 L862.5,1800 L862.5,1860" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M1597.5,900 L1537.5,900 L862.5,900 L802.5,900" stroke="#000000" stroke-width="4.1666665" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    </g>
+  </g>
+</svg>

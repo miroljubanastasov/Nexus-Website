@@ -1,0 +1,446 @@
+{
+  "house": {
+    "grid_shape": [
+      4,
+      3,
+      2
+    ],
+    "modules": [
+      {
+        "name": "Entrance",
+        "type": "NX_ELE_ENT_00",
+        "position": [
+          3,
+          0,
+          0
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Entrance Porch",
+        "type": "NX_ELE_EPO_00",
+        "position": [
+          3,
+          1,
+          0
+        ],
+        "rotation": 2,
+        "flip": false,
+        "is_indoor": false,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Living Room",
+        "type": "NX_ELE_LIV_00",
+        "position": [
+          1,
+          1,
+          0
+        ],
+        "rotation": 3,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": true,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Connecting Void",
+        "type": "NX_ELE_CON_00",
+        "position": [
+          1,
+          1,
+          1
+        ],
+        "rotation": 2,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Garden",
+        "type": "NX_ELE_GAR_00",
+        "position": [
+          0,
+          1,
+          0
+        ],
+        "rotation": 3,
+        "flip": false,
+        "is_indoor": false,
+        "open_to_sky": true,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Dinning",
+        "type": "NX_ELE_DIN_00",
+        "position": [
+          2,
+          1,
+          0
+        ],
+        "rotation": 0,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": true,
+          "W": false
+        }
+      },
+      {
+        "name": "Kitchen",
+        "type": "NX_ELE_KIT_00",
+        "position": [
+          2,
+          0,
+          0
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Master Bedroom",
+        "type": "NX_ELE_MBR_00",
+        "position": [
+          0,
+          2,
+          0
+        ],
+        "rotation": 2,
+        "flip": true,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": true,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Master Bathroom",
+        "type": "NX_ELE_MBA_00",
+        "position": [
+          1,
+          2,
+          0
+        ],
+        "rotation": 3,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Technik Raum",
+        "type": "NX_ELE_TRA_00",
+        "position": [
+          1,
+          0,
+          0
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Office",
+        "type": "NX_ELE_OFF_00",
+        "position": [
+          2,
+          2,
+          0
+        ],
+        "rotation": 3,
+        "flip": true,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": true,
+          "W": false
+        }
+      },
+      {
+        "name": "Single Bedroom",
+        "type": "NX_ELE_SBR_00",
+        "position": [
+          3,
+          1,
+          1
+        ],
+        "rotation": 0,
+        "flip": true,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": true
+        }
+      },
+      {
+        "name": "Single Bedroom",
+        "type": "NX_ELE_SBR_00",
+        "position": [
+          2,
+          2,
+          1
+        ],
+        "rotation": 3,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": true,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Guest Bedroom",
+        "type": "NX_ELE_GBR_00",
+        "position": [
+          2,
+          0,
+          1
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": true,
+          "W": false
+        }
+      },
+      {
+        "name": "Shared Bathroom",
+        "type": "NX_ELE_SBA_00",
+        "position": [
+          2,
+          1,
+          1
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Shared Bathroom",
+        "type": "NX_ELE_SBA_00",
+        "position": [
+          1,
+          0,
+          1
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Stairs",
+        "type": "NX_ELE_STA_00",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      },
+      {
+        "name": "Stairs",
+        "type": "NX_ELE_STA_00",
+        "position": [
+          0,
+          0,
+          1
+        ],
+        "rotation": 1,
+        "flip": false,
+        "is_indoor": true,
+        "open_to_sky": false,
+        "primary_facade": {
+          "N": false,
+          "E": false,
+          "S": false,
+          "W": false
+        }
+      }
+    ],
+    "partitions": [
+      {
+        "type": "NX_ELE_PAR_INS_01",
+        "from_module": 8,
+        "to_module": 2,
+        "level": 0,
+        "cell": [
+          1,
+          2
+        ],
+        "rotation": 3,
+        "flip": false
+      },
+      {
+        "type": "NX_ELE_PAR_SHL_01",
+        "from_module": 10,
+        "to_module": 5,
+        "level": 0,
+        "cell": [
+          2,
+          2
+        ],
+        "rotation": 3,
+        "flip": true
+      },
+      {
+        "type": "NX_ELE_PAR_INS_00",
+        "from_module": 8,
+        "to_module": 10,
+        "level": 0,
+        "cell": [
+          1,
+          2
+        ],
+        "rotation": 2,
+        "flip": true
+      },
+      {
+        "type": "NX_ELE_PAR_INS_00",
+        "from_module": 11,
+        "to_module": 14,
+        "level": 1,
+        "cell": [
+          3,
+          1
+        ],
+        "rotation": 0,
+        "flip": true
+      },
+      {
+        "type": "NX_ELE_PAR_INS_00",
+        "from_module": 12,
+        "to_module": 14,
+        "level": 1,
+        "cell": [
+          2,
+          2
+        ],
+        "rotation": 3,
+        "flip": false
+      },
+      {
+        "type": "NX_ELE_PAR_INS_00",
+        "from_module": 13,
+        "to_module": 15,
+        "level": 1,
+        "cell": [
+          2,
+          0
+        ],
+        "rotation": 0,
+        "flip": true
+      },
+      {
+        "type": "NX_ELE_PAR_INS_01",
+        "from_module": 13,
+        "to_module": 14,
+        "level": 1,
+        "cell": [
+          2,
+          0
+        ],
+        "rotation": 1,
+        "flip": false
+      }
+    ]
+  },
+  "metrics": {
+    "solver_time": 2.6399872303009033,
+    "objective_value": 117.0,
+    "num_conflicts": 1174,
+    "num_branches": 17928,
+    "status": "OPTIMAL"
+  }
+}

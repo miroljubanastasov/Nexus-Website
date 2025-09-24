@@ -1,0 +1,308 @@
+/* Color & stroke palette (use these variables to theme SVGs) */
+:root {
+    /* Colors */
+    --color-ink: #3d3d3d;
+    --color-muted: grey;
+    --color-light: rgb(187, 187, 187);
+    --color-ultra-light: rgb(245, 245, 245);
+    --color-highlight: #96d64334;
+
+    --wall-fill: var(--color-light);
+
+    --lw-hair: 0.25;
+    --lw-thin: 0.5;
+    --lw-medium: 1;
+    --lw-thick: 1;
+}
+
+/* Default styling for everything else */
+svg * {
+    stroke: var(--color-ink) !important;
+    stroke-width: var(--lw-thin) !important;
+    fill: none !important;
+    vector-effect: non-scaling-stroke !important;
+    /* Prevent stroke from scaling */
+    /* Disable pointer events on all SVG elements by default so hover only works
+       for explicitly enabled layers (e.g. children of #200_HIGHLIGHT) */
+    pointer-events: none !important;
+}
+
+/* Wall cuts - exact match with high specificity */
+[id="300_WALL_CUT"] * {
+    stroke: var(--color-ink) !important;
+    stroke-width: var(--lw-thick) !important;
+    fill: var(--wall-fill) !important;
+}
+
+/* Grid  - exact match with high specificity */
+[id="200_GRID"] * {
+    stroke: var(--color-ink) !important;
+    stroke-width: var(--lw-hair) !important;
+    stroke-dasharray: 8 3 1 3 !important;
+    fill: none !important;
+}
+
+/* Bounding box - should be hidden */
+[id="200_BOUNDING_BOX"] * {
+    display: none !important;
+}
+
+/* Guide elements - should be hidden */
+[id="200_GUIDE"] * {
+    display: none !important;
+}
+
+[id="300_FLOOR_PAT"] * {
+    display: none !important;
+}
+
+[id="300_FLOOR_ELE"] * {
+    fill: var(--color-ultra-light) !important;
+}
+
+[id="200_OPEN_TO_BELOW"] * {
+    stroke: var(--color-muted) !important;
+    stroke-width: var(--lw-hair) !important;
+    stroke-dasharray: 6 6 !important;
+}
+
+[id="300_FURN_PRIM"] * {
+    stroke: var(--color-ink) !important;
+    stroke-width: var(--lw-thin) !important;
+}
+
+[id="300_FURN_SEC"] * {
+    stroke: var(--color-muted) !important;
+    stroke-width: var(--lw-hair) !important;
+}
+
+/* MODULE MARKERS */
+[id="200_MODULE_MARKERS"] * {
+    stroke: var(--color-ink) !important;
+    /* Dash-dot pattern: dash 6, gap 3, dot 1, gap 3 */
+    stroke-dasharray: 6 3 1 3 !important;
+    stroke: none !important;
+    fill: var(--color-ink) !important;
+}
+
+/* DIMENSION TEXT */
+[id="200_DIM"] text {
+    fill: var(--color-muted) !important;
+    stroke: none !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 10px !important;
+    font-weight: normal !important;
+    text-anchor: middle !important;
+    dominant-baseline: central !important;
+    /* Force text to always be readable without rotation */
+    text-orientation: upright !important;
+    writing-mode: horizontal-tb !important;
+    direction: ltr !important;
+    unicode-bidi: normal !important;
+}
+
+
+[id="200_DIM"] * {
+    stroke: var(--color-muted) !important;
+    fill: var(--color-muted) !important;
+}
+
+/* HIGHLIGHT ELEMENTS */
+[id="200_HIGHLIGHT"] {
+    cursor: default !important;
+}
+
+/* Individual highlight elements - target any child element */
+[id="200_HIGHLIGHT"]>* {
+    stroke: none !important;
+    fill: transparent !important;
+    /* Re-enable pointer events only for direct children so they can be hovered */
+    pointer-events: all !important;
+    /* Show pointer cursor for hoverable elements */
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Individual element hover - highlight only the hovered element */
+[id="200_HIGHLIGHT"]>*:hover {
+    stroke: none !important;
+    stroke-width: var(--lw-thick) !important;
+    fill: var(--color-highlight) !important;
+    /* Red semi-transparent highlight fill */
+}
+
+
+/* Carousel styling */
+.carousel-nav {
+    padding: 10px 0;
+}
+
+.level-title h5 {
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+.level-indicator {
+    font-weight: 500;
+    color: #666;
+}
+
+.svg-display-area {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Fullscreen carousel adjustments */
+.canvas-container .level-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.canvas-container .carousel-nav {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.carousel-nav .btn {
+    min-width: 120px;
+}
+
+.carousel-nav .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Simple ID-based SVG styling */
+
+/* Utility classes for SVG elements (apply to <g> or elements inside SVG) */
+.stroke-ink * {
+    stroke: var(--color-ink) !important;
+}
+
+.stroke-muted * {
+    stroke: var(--color-muted) !important;
+}
+
+.stroke-grid * {
+    stroke: var(--color-grid) !important;
+}
+
+.stroke-wall * {
+    stroke: var(--color-wall) !important;
+}
+
+.fill-wall * {
+    fill: var(--fill-wall) !important;
+}
+
+.fill-accent * {
+    fill: var(--fill-accent) !important;
+}
+
+.lw-hair * {
+    stroke-width: var(--lw-hair) !important;
+}
+
+.lw-thin * {
+    stroke-width: var(--lw-thin) !important;
+}
+
+.lw-medium * {
+    stroke-width: var(--lw-medium) !important;
+}
+
+.lw-thick * {
+    stroke-width: var(--lw-thick) !important;
+}
+
+/* Shorthand for applying stroke/fill directly to SVG elements (not groups) */
+.stroke-ink,
+.stroke-muted,
+.stroke-grid,
+.stroke-wall {
+    stroke: currentColor;
+}
+
+.fill-wall,
+.fill-accent {
+    fill: currentColor;
+}
+
+/* Helpful helper: visually hide small annotation layers while keeping DOM */
+.hide-layer * {
+    display: none !important;
+}
+
+/* Floor Plans Page Styles */
+.canvas-container {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#svgContainer {
+    width: calc(100vw - 80px);
+    height: calc(100vh - 80px);
+    border: 1px solid #adb5bd;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    display: none;
+}
+
+/* Hide canvas initially */
+.canvas-container.hidden {
+    display: none;
+}
+
+/* Close button for fullscreen canvas */
+.canvas-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

@@ -1,0 +1,19 @@
+{
+    "watch": [
+        "**/*.html",
+        "**/*.css",
+        "**/*.js",
+        "!node_modules/**",
+        "!.git/**"
+    ],
+    "ignore": [
+        "assets/output/**"
+    ],
+    "host": "localhost",
+    "port": 5500,
+    "open": false,
+    "watchOptions": {
+        "usePolling": true,
+        "interval": 100
+    }
+}

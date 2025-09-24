@@ -1,5 +1,3 @@
-
-
 :root {
   --nav-bar-size: 54px;
   --vh: 1vh;
@@ -84,34 +82,34 @@
 }
 
 
-.hero{
+.hero {
   height: calc(100svh - var(--nav-bar-size));
 
   background-color: #333;
   background-image: url("../src/BG.png");
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
   /* background-attachment:fixed; */
   background-position: 50% 0px;
 
-  
+
   display: flex;
   align-items: center;
   /* justify-content: center; */
-  
+
 }
 
-.logo-small{
+.logo-small {
   height: 14px;
   margin: 10px;
 }
 
-.logo-large{
+.logo-large {
   height: 32px;
   margin: 50px;
 }
 
-.navbar{
+.navbar {
   height: var(--nav-bar-size);
 }
 
@@ -128,6 +126,7 @@
 .carousel {
   margin-bottom: 4rem;
 }
+
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
   bottom: 3rem;
@@ -148,11 +147,13 @@
   margin-bottom: 1.5rem;
   text-align: center;
 }
+
 /* rtl:begin:ignore */
 .marketing .col-lg-4 p {
   margin-right: .75rem;
   margin-left: .75rem;
 }
+
 /* rtl:end:ignore */
 
 
@@ -161,7 +162,8 @@
 
 
 .featurette-divider {
-  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+  margin: 5rem 0;
+  /* Space out the Bootstrap <hr> more */
 }
 
 /* Thin out the marketing headings */
@@ -176,6 +178,7 @@
 -------------------------------------------------- */
 
 @media (min-width: 40em) {
+
   /* Bump up size of carousel content */
   .carousel-caption p {
     margin-bottom: 1.25rem;

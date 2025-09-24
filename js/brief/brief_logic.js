@@ -149,8 +149,6 @@ export function run_brief({ occupants, guest, office, atelier, garage, spa, stor
   }
 
   rooms.push(...shared_baths);
-  console.log(shared_baths)
-
 
   //Living Spaces
   //Entrance Lobby

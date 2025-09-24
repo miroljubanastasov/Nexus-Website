@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Floor Plans - Nexus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/floorplans.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.7.0/dist/es-module-shims.js"></script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "rhino3dm":"https://cdn.jsdelivr.net/npm/rhino3dm@8.17.0/rhino3dm.module.min.js",
+                "rhinocompute": "https://www.unpkg.com/compute-rhino3d@0.13.0-beta/compute.rhino3d.module.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAVBAR (consistent with other pages) -->
+    <nav class="navbar navbar-expand-md bg-light sticky-top border-bottom" data-bs-theme="light">
+        <div class="container">
+            <img src="src/NEXUS LOGO_LOGO EXPORT.png" alt="" class="logo-small">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
+                aria-controls="offcanvas" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasLabel">nexus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav flex-grow-1 justify-content-between">
+                        <li class="nav-item"><a class="nav-link" href="#">
+                                <svg class="bi" width="24" height="24">
+                                    <use xlink:href="#aperture" />
+                                </svg>
+                            </a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Design</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">System</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Info</a></li>
+                        <li class="nav-item"><a class="nav-link" href="brief.html">Brief Tool</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="floorplans.html">Floor
+                                Plans</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <div class="container py-4">
+        <h1 class="mb-4">
+            Floor Plan Generator
+        </h1>
+        <p class="lead text-muted mb-4">Generate SVG floor plans using Rhino Compute server</p>
+
+        <!-- Action Button -->
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-primary btn-lg" id="generateBtn">
+                <i class="fas fa-play me-2"></i>
+                Generate Floor Plan
+            </button>
+        </div>
+
+        <!-- SVG CANVAS CONTAINER -->
+        <div class="canvas-container hidden">
+            <button class="canvas-close-btn" onclick="closeCanvas()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="svgContainer">
+                <div class="text-center text-muted">
+                    <i class="fas fa-home fa-3x mb-3"></i>
+                    <p class="mb-0"></p>
+                    <small>Generating floor plan...</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS/ERROR MESSAGES -->
+        <div id="statusMessages" class="mt-3"></div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+    <!-- Custom Scripts -->
+    <script type="module" src="js/floorplans/get_flooplan.js"></script>
+    <script type="module" src="js/floorplans/svg-manager.js"></script>
+
+    <script>
+        // Canvas management functions
+        function showCanvas() {
+            document.querySelector('.canvas-container').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeCanvas() {
+            document.querySelector('.canvas-container').classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore scroll
+        }
+
+        // Make functions available globally
+        window.showCanvas = showCanvas;
+        window.closeCanvas = closeCanvas;
+    </script>
+
+</body>
+
+</html>
