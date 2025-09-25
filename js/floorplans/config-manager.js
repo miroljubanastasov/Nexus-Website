@@ -15,6 +15,13 @@ class ConfigManager {
         this.initializeEventListeners();
     }
 
+    // Internal debug helper; enable by setting window.NEXUS_DEBUG = true
+    dbg(...args) {
+        try {
+            if (window.NEXUS_DEBUG) console.debug(...args);
+        } catch (_) { /* no-op */ }
+    }
+
     /**
      * Set the compute function reference
      * @param {Function} computeFunction - The computeFromSolution function
@@ -221,10 +228,10 @@ class ConfigManager {
 
         // Check required numeric values
         const requiredNumbers = [
-            { id: 'bedrooms', min: 1, max: 5, name: 'Bedrooms' },
-            { id: 'siteWidth', min: 5, max: 50, name: 'Site Width' },
-            { id: 'siteDepth', min: 5, max: 50, name: 'Site Depth' },
-            { id: 'maxLevels', min: 1, max: 4, name: 'Max Levels' },
+            { id: 'bedrooms', min: 0, max: 4, name: 'Bedrooms' },
+            { id: 'siteWidth', min: 15, max: 40, name: 'Site Width' },
+            { id: 'siteDepth', min: 15, max: 40, name: 'Site Depth' },
+            { id: 'maxLevels', min: 1, max: 3, name: 'Max Levels' },
             { id: 'floorHeight', min: 2.5, max: 4.0, name: 'Floor Height' }
         ];
 
@@ -278,7 +285,7 @@ class ConfigManager {
      */
     async generateFloorPlan() {
         // Legacy method that combines both steps for backward compatibility
-        console.log('🔄 Using legacy generateFloorPlan - executing two-step workflow');
+        this.dbg('🔄 Using legacy generateFloorPlan - executing two-step workflow');
 
         const validation = this.validateConfiguration();
         if (!validation.isValid) {
@@ -292,7 +299,7 @@ class ConfigManager {
 
         try {
             // Step 1: Call solver API to get house solution
-            console.log('🔄 Step 1: Solving house...');
+            this.dbg('🔄 Step 1: Solving house...');
             this.showSolverStatus('Solving house with current configuration...', 'info');
 
             const solverResult = await this.sendToSolver(briefData, plotData);
@@ -308,7 +315,7 @@ class ConfigManager {
             this.displaySolution(solverResult.solution);
             this.toggleGenerateButtons(true);
 
-            console.log('✅ Step 1 complete: House solution ready for floor plan generation');
+            this.dbg('✅ Step 1 complete: House solution ready for floor plan generation');
 
         } catch (error) {
             console.error('💥 Error in floor plan generation process:', error);
@@ -369,7 +376,7 @@ class ConfigManager {
         const API_BASE_URL = "http://localhost:8080";  // For local testing
         // const API_BASE_URL = "https://nexus-solver-482344765452.europe-west3.run.app";  // Production
 
-        console.log('\n🏠 Running House Solver API...');
+        this.dbg('\n🏠 Running House Solver API...');
 
         try {
             // Prepare request - match your Python structure
@@ -381,9 +388,9 @@ class ConfigManager {
             };
 
             const endpoint = `${API_BASE_URL}/api/v1/solve/house-layout`;
-            console.log(`📡 Sending request to ${endpoint}`);
-            console.log(`⏱️ Solver timeout: ${request.solver_timeout}s`);
-            console.log(`📤 Request payload:`, JSON.stringify(request, null, 2));
+            this.dbg(`📡 Sending request to ${endpoint}`);
+            this.dbg(`⏱️ Solver timeout: ${request.solver_timeout}s`);
+            this.dbg(`📤 Request payload:`, JSON.stringify(request, null, 2));
 
             // Show loading state
             this.showSolverStatus('Solving house layout...', 'info');
@@ -404,13 +411,13 @@ class ConfigManager {
             clearTimeout(timeoutId);
 
             // Log response status
-            console.log(`📡 API Response Status: ${response.status} ${response.statusText}`);
+            this.dbg(`📡 API Response Status: ${response.status} ${response.statusText}`);
 
             if (response.ok) {
                 const result = await response.json();
-                console.log('✅ House solver API call succeeded');
-                console.log('📋 Response headers:', Object.fromEntries(response.headers.entries()));
-                console.log('📊 Raw API Response:', JSON.stringify(result, null, 2));
+                this.dbg('✅ House solver API call succeeded');
+                this.dbg('📋 Response headers:', Object.fromEntries(response.headers.entries()));
+                this.dbg('📊 Raw API Response:', JSON.stringify(result, null, 2));
 
                 this.showSolverStatus('House layout solved successfully!', 'success');
                 return {
@@ -568,8 +575,8 @@ class ConfigManager {
 
             if (result.success) {
                 // Log API status and solution JSON
-                console.log('✅ API Status: SUCCESS');
-                console.log('📊 Solution JSON:', JSON.stringify(result.solution, null, 2));
+                this.dbg('✅ API Status: SUCCESS');
+                this.dbg('📊 Solution JSON:', JSON.stringify(result.solution, null, 2));
 
                 // Store the solution and plot data for floor plan generation
                 this.currentSolution = result.solution;
@@ -586,9 +593,9 @@ class ConfigManager {
                 this.toggleProjectExport(true);
                 // Already opened above
             } else {
-                console.log('❌ API Status: FAILED');
-                console.log('❌ Error:', result.error);
-                console.log('🚫 Disabling floor plan generation button');
+                this.dbg('❌ API Status: FAILED');
+                this.dbg('❌ Error:', result.error);
+                this.dbg('🚫 Disabling floor plan generation button');
                 this.showSolverStatus(`Solver failed: ${result.error}`, 'danger');
                 this.toggleGenerateButtons(false);
                 this.toggleSolutionExport(false);
@@ -597,7 +604,7 @@ class ConfigManager {
                 // Clear any existing solution to prevent accidental generation
                 this.currentSolution = null;
                 this.currentPlotData = null;
-                console.log('🧹 Cleared solution data to prevent floor plan generation');
+                this.dbg('🧹 Cleared solution data to prevent floor plan generation');
             }
         } catch (error) {
             console.error('Error solving house:', error);
@@ -614,19 +621,19 @@ class ConfigManager {
      * Generate floor plan from existing solution - second step of workflow
      */
     async generateFloorPlanFromSolution() {
-        console.log('📋 Generate floor plan button clicked');
-        console.log('🔍 Checking for solution data...');
-        console.log('📊 Current solution:', this.currentSolution);
-        console.log('📍 Current plot data:', this.currentPlotData);
+        this.dbg('📋 Generate floor plan button clicked');
+        this.dbg('🔍 Checking for solution data...');
+        this.dbg('📊 Current solution:', this.currentSolution);
+        this.dbg('📍 Current plot data:', this.currentPlotData);
 
         if (!this.currentSolution) {
-            console.log('❌ No solution available');
+            this.dbg('❌ No solution available');
             this.showSolverStatus('No solution available. Please solve the house first.', 'warning');
             return;
         }
 
         if (!this.currentPlotData) {
-            console.log('❌ No plot data available');
+            this.dbg('❌ No plot data available');
             this.showSolverStatus('No plot data available. Please solve the house first.', 'warning');
             return;
         }
@@ -638,9 +645,9 @@ class ConfigManager {
         }
 
         try {
-            console.log('🔄 Generating floor plan from solution...');
-            console.log('📊 Using solution:', this.currentSolution);
-            console.log('📋 Using plot data:', this.currentPlotData);
+            this.dbg('🔄 Generating floor plan from solution...');
+            this.dbg('📊 Using solution:', this.currentSolution);
+            this.dbg('📋 Using plot data:', this.currentPlotData);
 
             this.showSolverStatus('Generating floor plan from solution...', 'info');
             this.toggleGenerateButtons(false);
@@ -648,7 +655,7 @@ class ConfigManager {
             // Call the computeFromSolution function with both solution and plot data
             await this.computeFromSolution(this.currentSolution, this.currentPlotData);
 
-            console.log('✅ Floor plan generation completed');
+            this.dbg('✅ Floor plan generation completed');
             this.showSolverStatus('Floor plan generated successfully!', 'success');
             // Enable solution export if generation succeeded and solution exists
             this.toggleSolutionExport(!!this.currentSolution);
@@ -669,7 +676,7 @@ class ConfigManager {
     displaySolution(solution) {
         // UI solution display removed for clean canvas layout.
         // Keep console output for debugging.
-        console.log('🔍 Solver solution (summary UI removed):', solution);
+        this.dbg('🔍 Solver solution (summary UI removed):', solution);
     }
 
     /**
@@ -693,7 +700,7 @@ class ConfigManager {
      * @param {boolean} enabled 
      */
     toggleGenerateButtons(enabled) {
-        console.log(`🔘 Setting Generate Floor Plan button to: ${enabled ? 'ENABLED' : 'DISABLED'}`);
+        this.dbg(`🔘 Setting Generate Floor Plan button to: ${enabled ? 'ENABLED' : 'DISABLED'}`);
         const btn = document.getElementById('generateFloorPlanBtn');
         if (btn) {
             btn.disabled = !enabled;
@@ -704,9 +711,7 @@ class ConfigManager {
                 btn.innerHTML = '<i class="fas fa-ban me-2"></i>Generate Floor Plan';
                 btn.className = 'btn btn-secondary';
             }
-            console.log(`✅ Button state updated - disabled: ${btn.disabled}, className: ${btn.className}`);
-        } else {
-            console.log('❌ Generate Floor Plan button not found');
+            this.dbg(`✅ Button state updated - disabled: ${btn.disabled}, className: ${btn.className}`);
         }
     }
 
@@ -822,7 +827,7 @@ class ConfigManager {
                         this.showSolverStatus('Configuration imported. Solve to create a solution.', 'info');
                     }
 
-                    console.log('📥 Imported project:', parsed);
+                    this.dbg('📥 Imported project parsed');
                 } catch (err) {
                     alert('Error parsing project file: ' + err.message);
                 } finally {

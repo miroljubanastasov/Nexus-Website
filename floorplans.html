@@ -345,80 +345,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 
-    <!-- Custom Scripts -->
-    <script type="module" src="js/floorplans/get_flooplan.js"></script>
-    <script type="module" src="js/floorplans/svg-manager.js"></script>
-    <script type="module" src="js/floorplans/config-manager.js"></script>
-
-    <script type="module">
-        import ConfigManager from './js/floorplans/config-manager.js';
-        import { compute, computeFromSolution } from './js/floorplans/get_flooplan.js';
-
-        // Initialize configuration manager
-        let configManager;
-
-        // Canvas management functions (updated for fixed layout)
-        function showCanvas() {
-            const container = document.querySelector('.canvas-container');
-            container.classList.add('has-content');
-            // No need to hide/show in fixed layout - canvas is always visible
-        }
-
-        function closeCanvas() {
-            const container = document.querySelector('.canvas-container');
-            container.classList.remove('has-content');
-            const svgContainer = document.getElementById('svgContainer');
-            if (svgContainer) {
-                svgContainer.innerHTML = `
-                    <div class="text-center text-muted">
-                        <i class="fas fa-home fa-3x mb-3"></i>
-                        <p class="mb-0">Floor Plan Viewer</p>
-                        <small>Configure and solve house to generate floor plan</small>
-                    </div>
-                `;
-            }
-        }
-
-        // Global function to hide solution display
-        function hideSolution() {
-            const solutionDisplay = document.getElementById('solutionDisplay');
-            if (solutionDisplay) {
-                solutionDisplay.style.display = 'none';
-            }
-        }
-
-        // Make functions available globally
-        window.showCanvas = showCanvas;
-        window.closeCanvas = closeCanvas;
-        window.hideSolution = hideSolution;
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            configManager = new ConfigManager();
-            // Pass the computeFromSolution function to the config manager
-            configManager.setComputeFunction(computeFromSolution);
-
-            // Legacy event listener - disabled since we now use direct button approach
-            // document.addEventListener('generateFloorPlan', async (event) => {
-            //     const eventData = event.detail;
-            //     console.log('🎯 Received generateFloorPlan event:', eventData);
-
-            //     try {
-            //         if (eventData.solution && eventData.plot) {
-            //             // New flow: use solver solution
-            //             console.log('🔄 Using solver solution for floor plan generation');
-            //             await computeFromSolution(eventData.solution, eventData.plot);
-            //         } else {
-            //             // Fallback: use old method with hardcoded files
-            //             console.log('🔄 Using fallback method with hardcoded files');
-            //             await compute();
-            //         }
-            //     } catch (error) {
-            //         console.error('💥 Error generating floor plan:', error);
-            //     }
-            // });
-        });
-    </script>
+    <!-- App entrypoint -->
+    <script type="module" src="js/floorplans/floorplans-page.js"></script>
 </body>
 
 </html>
