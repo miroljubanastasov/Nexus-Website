@@ -1,14 +1,32 @@
-import rhino3dm from 'rhino3dm'
-import { RhinoCompute } from 'rhinocompute'
 import SvgManager from './svg-manager.js'
+import { loadModuleLibrary, renderPlan } from '../plan/plan-renderer.js'
+
+// Plan engine:
+//   'local'   (default) draw plans in the browser from assets/modules/module_library.json
+//   'compute' legacy Rhino Compute + Grasshopper round trip (needs a local compute server)
+// Choose with ?engine=compute or window.NEXUS_PLAN_ENGINE = 'compute'.
+const PLAN_ENGINE = new URLSearchParams(location.search).get('engine') || window.NEXUS_PLAN_ENGINE || 'local';
+let moduleLibrary = null;
+let RhinoCompute = null;
+
+async function ensureModuleLibrary() {
+    if (!moduleLibrary) moduleLibrary = await loadModuleLibrary('assets/modules/module_library.json');
+    return moduleLibrary;
+}
+
+async function ensureRhinoCompute() {
+    if (!RhinoCompute) {
+        await import('rhino3dm');
+        ({ RhinoCompute } = await import('rhinocompute'));
+        RhinoCompute.url = 'http://localhost:5000/';
+    }
+    return RhinoCompute;
+}
 
 // Debug helper
 function dbg(...args) {
     try { if (window.NEXUS_DEBUG) console.debug(...args); } catch (_) { }
 }
-
-// Configure RhinoCompute to use local server
-RhinoCompute.url = 'http://localhost:5000/'
 
 // Initialize SVG Manager
 const svgManager = new SvgManager('svgContainer');
@@ -100,6 +118,11 @@ async function computeFromSolution(solutionData, plotData) {
     }
 
     try {
+        if (PLAN_ENGINE === 'local') {
+            await renderLocally(solutionData, plotData);
+            return;
+        }
+        await ensureRhinoCompute();
         // Ensure definition is loaded (lazy init for new flow)
         if (!definition) {
             const ok = await initializeDefinition();
@@ -192,6 +215,30 @@ async function computeFromSolution(solutionData, plotData) {
     }
 }
 
+
+/**
+ * Draw every level in the browser with the module library (no Rhino server).
+ */
+async function renderLocally(solutionData, plotData) {
+    const lib = await ensureModuleLibrary();
+    const house = solutionData?.house ?? solutionData;
+    const levels = [...new Set((house?.modules ?? []).map((m) => m.position?.[2] ?? 0))].sort((a, b) => a - b);
+    const levelsCount = levels.length || 1;
+
+    window.showCanvas();
+    svgManager.showLoading();
+    svgManager.initializeProgressiveCarousel(levelsCount);
+    window.dispatchEvent(new CustomEvent('nexus:svgInit', { detail: { levelsCount } }));
+
+    for (const level of levels) {
+        const displayTitle = level === 0 ? 'Ground Floor' : `Level ${level}`;
+        const svgContent = renderPlan(lib, house, level, { title: displayTitle, plot: plotData });
+        window.dispatchEvent(new CustomEvent('nexus:svgLevel', { detail: { level, title: displayTitle, svgContent } }));
+        loadSvgIntoCarousel(level, svgContent, displayTitle);
+    }
+    window.dispatchEvent(new CustomEvent('nexus:svgDone'));
+    showStatus(`All ${levelsCount} floor plan levels generated`, 'success');
+}
 
 // UI Helper functions
 function showStatus(message, type = 'info') {

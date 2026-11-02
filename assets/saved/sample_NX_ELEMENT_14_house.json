@@ -1,0 +1,699 @@
+{
+  "grid_shape": [
+    4,
+    3,
+    3
+  ],
+  "grid_size": 3.75,
+  "modules": [
+    {
+      "id": 0,
+      "name": "Entrance",
+      "type": "NX_ELE_ENT_00",
+      "position": [
+        2,
+        2,
+        0
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": true,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 1,
+      "name": "Entrance Porch",
+      "type": "NX_ELE_EPO_00",
+      "position": [
+        3,
+        2,
+        0
+      ],
+      "rotation": 0,
+      "flip": false,
+      "is_indoor": false,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 2,
+      "name": "Living Room",
+      "type": "NX_ELE_LIV_00",
+      "position": [
+        0,
+        2,
+        0
+      ],
+      "rotation": 2,
+      "flip": true,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": true,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": true,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 3,
+      "name": "Connecting Void",
+      "type": "NX_ELE_CON_00",
+      "position": [
+        0,
+        2,
+        1
+      ],
+      "rotation": 2,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": true,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": 2
+    },
+    {
+      "id": 4,
+      "name": "Garden",
+      "type": "NX_ELE_GAR_00",
+      "position": [
+        1,
+        0,
+        0
+      ],
+      "rotation": 0,
+      "flip": false,
+      "is_indoor": false,
+      "open_to_sky": true,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 5,
+      "name": "Dinning",
+      "type": "NX_ELE_DIN_00",
+      "position": [
+        1,
+        2,
+        0
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 6,
+      "name": "Kitchen",
+      "type": "NX_ELE_KIT_00",
+      "position": [
+        1,
+        1,
+        0
+      ],
+      "rotation": 0,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 7,
+      "name": "Master Bedroom",
+      "type": "NX_ELE_MBR_00",
+      "position": [
+        3,
+        2,
+        1
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": true,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 8,
+      "name": "Master Bathroom",
+      "type": "NX_ELE_MBA_00",
+      "position": [
+        2,
+        2,
+        1
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 9,
+      "name": "Technik Raum",
+      "type": "NX_ELE_TRA_00",
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "rotation": 2,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": true,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 10,
+      "name": "Office",
+      "type": "NX_ELE_OFF_00",
+      "position": [
+        1,
+        2,
+        1
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 11,
+      "name": "Parents Bedroom",
+      "type": "NX_ELE_PBR_00",
+      "position": [
+        0,
+        1,
+        2
+      ],
+      "rotation": 2,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": true,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": true,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 12,
+      "name": "Parents Bathroom",
+      "type": "NX_ELE_PBA_00",
+      "position": [
+        1,
+        1,
+        2
+      ],
+      "rotation": 1,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 13,
+      "name": "Single Bedroom",
+      "type": "NX_ELE_SBR_00",
+      "position": [
+        2,
+        2,
+        2
+      ],
+      "rotation": 0,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": true,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 14,
+      "name": "Single Bedroom",
+      "type": "NX_ELE_SBR_00",
+      "position": [
+        0,
+        2,
+        2
+      ],
+      "rotation": 2,
+      "flip": true,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": true,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 15,
+      "name": "Guest Bedroom",
+      "type": "NX_ELE_GBR_00",
+      "position": [
+        0,
+        1,
+        1
+      ],
+      "rotation": 2,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "all_facade": {
+        "N": true,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 16,
+      "name": "Shared Bathroom",
+      "type": "NX_ELE_SBA_00",
+      "position": [
+        1,
+        2,
+        2
+      ],
+      "rotation": 3,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": true,
+        "S": false,
+        "W": false
+      },
+      "void_over": null
+    },
+    {
+      "id": 17,
+      "name": "Shared Bathroom",
+      "type": "NX_ELE_SBA_00",
+      "position": [
+        1,
+        1,
+        1
+      ],
+      "rotation": 1,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 18,
+      "name": "Stairs",
+      "type": "NX_ELE_STA_00",
+      "position": [
+        2,
+        1,
+        0
+      ],
+      "rotation": 1,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": true,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 19,
+      "name": "Stairs",
+      "type": "NX_ELE_STA_00",
+      "position": [
+        2,
+        1,
+        1
+      ],
+      "rotation": 1,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": true,
+        "W": true
+      },
+      "void_over": null
+    },
+    {
+      "id": 20,
+      "name": "Stairs",
+      "type": "NX_ELE_STA_00",
+      "position": [
+        2,
+        1,
+        2
+      ],
+      "rotation": 1,
+      "flip": false,
+      "is_indoor": true,
+      "open_to_sky": false,
+      "primary_facade": {
+        "N": false,
+        "E": false,
+        "S": false,
+        "W": false
+      },
+      "all_facade": {
+        "N": false,
+        "E": false,
+        "S": true,
+        "W": true
+      },
+      "void_over": null
+    }
+  ],
+  "partitions": [
+    {
+      "type": "NX_ELE_PAR_SHL_01",
+      "cell": [
+        1,
+        2
+      ],
+      "level": 1,
+      "rotation": 0,
+      "flip": false,
+      "from_module": 10,
+      "to_module": 3
+    },
+    {
+      "type": "NX_ELE_PAR_INS_01",
+      "cell": [
+        0,
+        1
+      ],
+      "level": 1,
+      "rotation": 1,
+      "flip": false,
+      "from_module": 15,
+      "to_module": 3
+    },
+    {
+      "type": "NX_ELE_PAR_INS_00",
+      "cell": [
+        2,
+        2
+      ],
+      "level": 1,
+      "rotation": 0,
+      "flip": false,
+      "from_module": 8,
+      "to_module": 10
+    },
+    {
+      "type": "NX_ELE_PAR_INS_01",
+      "cell": [
+        2,
+        2
+      ],
+      "level": 1,
+      "rotation": 3,
+      "flip": false,
+      "from_module": 8,
+      "to_module": 19
+    },
+    {
+      "type": "NX_ELE_PAR_SHL_01",
+      "cell": [
+        1,
+        2
+      ],
+      "level": 1,
+      "rotation": 3,
+      "flip": false,
+      "from_module": 10,
+      "to_module": 17
+    },
+    {
+      "type": "NX_ELE_PAR_INS_00",
+      "cell": [
+        0,
+        1
+      ],
+      "level": 2,
+      "rotation": 2,
+      "flip": false,
+      "from_module": 11,
+      "to_module": 12
+    },
+    {
+      "type": "NX_ELE_PAR_INS_00",
+      "cell": [
+        2,
+        2
+      ],
+      "level": 2,
+      "rotation": 0,
+      "flip": false,
+      "from_module": 13,
+      "to_module": 16
+    },
+    {
+      "type": "NX_ELE_PAR_INS_01",
+      "cell": [
+        2,
+        2
+      ],
+      "level": 2,
+      "rotation": 3,
+      "flip": false,
+      "from_module": 13,
+      "to_module": 20
+    },
+    {
+      "type": "NX_ELE_PAR_INS_00",
+      "cell": [
+        0,
+        2
+      ],
+      "level": 2,
+      "rotation": 2,
+      "flip": true,
+      "from_module": 14,
+      "to_module": 16
+    },
+    {
+      "type": "NX_ELE_PAR_INS_00",
+      "cell": [
+        0,
+        1
+      ],
+      "level": 1,
+      "rotation": 2,
+      "flip": false,
+      "from_module": 15,
+      "to_module": 17
+    }
+  ]
+}

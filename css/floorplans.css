@@ -15,8 +15,9 @@
     --lw-thick: 1;
 }
 
-/* Default styling for everything else */
-svg * {
+/* Default styling for legacy Grasshopper SVGs. Plans drawn by
+   js/plan/plan-renderer.js (svg.nx-plan) carry their own styles. */
+svg:not(.nx-plan) * {
     stroke: var(--color-ink) !important;
     stroke-width: var(--lw-thin) !important;
     fill: none !important;
