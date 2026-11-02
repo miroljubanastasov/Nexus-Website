@@ -374,6 +374,27 @@ const STYLE = `
 .nx-plan .dim-t{font-size:22px;fill:var(--nx-mid)}
 .nx-plan .grid-t{font-size:13px;fill:var(--nx-mid)}
 .nx-plan .title{font-size:30px;font-weight:600;text-anchor:start}
+.nx-plan{--nx-plot:#eef1e8;--nx-plot-edge:#5f6b55;--nx-build:#f9faf6;--nx-accent:#2f6f8f;--nx-floor:#ffffff;--nx-warn:#b4532a}
+@media (prefers-color-scheme:dark){.nx-plan.nx-auto{--nx-plot:#1d2219;--nx-plot-edge:#9fae92;--nx-build:#171a15;--nx-accent:#7fb8d6;--nx-floor:#141416;--nx-warn:#e39a74}}
+.nx-plan .floor{fill:var(--nx-floor);stroke:none}
+.nx-plan .plot{fill:var(--nx-plot);stroke:var(--nx-plot-edge);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.nx-plan .buildable{fill:var(--nx-build);stroke:var(--nx-accent);stroke-width:1;stroke-dasharray:7 5;vector-effect:non-scaling-stroke}
+.nx-plan .site-grid{stroke:var(--nx-accent);stroke-width:.5;opacity:.35}
+.nx-plan .ghost{stroke:var(--nx-mid);stroke-width:.8;stroke-dasharray:4 4}
+.nx-plan .site-dimline{stroke:var(--nx-mid);stroke-width:.7}
+.nx-plan .street{stroke:var(--nx-mid);stroke-width:1.2;stroke-dasharray:14 8}
+.nx-plan .access{fill:var(--nx-accent);stroke:none}
+.nx-plan .north-ring{fill:var(--nx-bg);stroke:var(--nx-ink);stroke-width:.9;vector-effect:non-scaling-stroke}
+.nx-plan .north-fill{fill:var(--nx-ink);stroke:var(--nx-ink);stroke-width:.6}
+.nx-plan .north-open{fill:var(--nx-bg);stroke:var(--nx-ink);stroke-width:.6}
+.nx-plan .north-t{font-size:30px;font-weight:700}
+.nx-plan .scale-a{fill:var(--nx-ink)}
+.nx-plan .scale-b{fill:var(--nx-bg);stroke:var(--nx-ink);stroke-width:.6;vector-effect:non-scaling-stroke}
+.nx-plan .site-t{font-size:24px;fill:var(--nx-mid);letter-spacing:.08em}
+.nx-plan .site-dim{font-size:22px;fill:var(--nx-mid)}
+.nx-plan .site-setback{font-size:20px;fill:var(--nx-accent)}
+.nx-plan .site-scale{font-size:20px;fill:var(--nx-mid);text-anchor:middle}
+.nx-plan .site-warn{font-size:22px;fill:var(--nx-warn)}
 `;
 
 const LAYER_CLASS = {
@@ -402,34 +423,48 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
     const [nx, ny] = house.grid_shape ?? [4, 3];
     const model = buildLevel(lib, house, level, opts);
     const S = opts.scale;
-
-    // world (Rhino, Y up) -> view (metres, y down): column = solver y, row = solver x
-    const view = ([X, Y]) => [X, -Y];
     const W = ny * CELL;
     const H = nx * CELL;
     const m = opts.margin;
     const top = opts.title ? 0.9 : 0;
     const vb = [-m * S, (-m - top) * S, (W + 2 * m) * S, (H + 2 * m + top) * S];
+
+    const parts = [svgOpen(opts, options, vb, level)];
+    parts.push(`<rect class="bg" x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}"/>`);
+    if (opts.title) parts.push(`<text class="title" x="0" y="${r2((-m - top / 2 + 0.6) * S)}">${esc(opts.title)}</text>`);
+    parts.push(...planBody(model, opts));
+    parts.push('</svg>');
+    return parts.join('');
+}
+
+function svgOpen(opts, options, vb, level) {
+    const out = [`<svg xmlns="http://www.w3.org/2000/svg" class="${opts.className}${options.autoDark === false ? '' : ' nx-auto'}" viewBox="${vb.map(r2).join(' ')}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" data-level="${level}" role="img" aria-label="${esc(opts.title ?? LEVEL_NAMES[level] ?? `Level ${level}`)}">`];
+    out.push(`<style>${STYLE}</style>`);
+    if (opts.labelScale !== 1) {
+        const k = +opts.labelScale || 1;
+        const c = opts.className;
+        out.push(`<style>.${c} .lbl-l{font-size:${24 * k}px}.${c} .lbl-s{font-size:${19 * k}px}.${c} .lbl-sub{font-size:${16 * k}px}.${c} .dim-t{font-size:${22 * k}px}.${c} .site-t{font-size:${24 * k}px}.${c} .site-dim{font-size:${22 * k}px}.${c} .title{font-size:${30 * k}px}</style>`);
+    }
+    return out.join('');
+}
+
+/** Building drawing for one level, in view units (column -> x, row -> y, origin at cell 0,0). */
+function planBody(model, opts) {
+    const S = opts.scale;
+    // world (Rhino, Y up) -> view (metres, y down): column = solver y, row = solver x
+    const view = ([X, Y]) => [X, -Y];
     const V = ([x, y]) => `${r2(x * S)},${r2(y * S)}`;
     const P = (p) => V(view(p));
     const path = (it) => `M${it.p.map(P).join('L')}${it.c ? 'Z' : ''}`;
-    // cell rectangle in view space (c.x = row, c.y = column)
     const cellQuad = (c) => {
         const x0 = c.y * CELL, y0 = c.x * CELL;
         return `M${[[x0, y0], [x0 + CELL, y0], [x0 + CELL, y0 + CELL], [x0, y0 + CELL]].map(V).join('L')}Z`;
     };
-
     const parts = [];
-    parts.push(`<svg xmlns="http://www.w3.org/2000/svg" class="${opts.className}${options.autoDark === false ? '' : ' nx-auto'}" viewBox="${vb.map(r2).join(' ')}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" data-level="${level}" role="img" aria-label="${esc(opts.title ?? LEVEL_NAMES[level] ?? `Level ${level}`)}">`);
-    parts.push(`<style>${STYLE}</style>`);
-    if (opts.labelScale !== 1) {
-        const k = +opts.labelScale || 1;
-        parts.push(`<style>.${opts.className} .lbl-l{font-size:${24 * k}px}.${opts.className} .lbl-s{font-size:${19 * k}px}.${opts.className} .lbl-sub{font-size:${16 * k}px}.${opts.className} .dim-t{font-size:${22 * k}px}</style>`);
-    }
-    parts.push(`<rect class="bg" x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}"/>`);
-    if (opts.title) parts.push(`<text class="title" x="0" y="${r2((-m - top / 2 + 0.6) * S)}">${esc(opts.title)}</text>`);
 
-    // outdoor cells tint
+    // floor of indoor cells (keeps the plot colour out of the rooms in site view)
+    const indoor = model.cells.filter((c) => c.indoor);
+    if (indoor.length) parts.push(`<g class="nx-layer" data-layer="floor"><path class="floor" d="${indoor.map(cellQuad).join('')}"/></g>`);
     const outdoor = model.cells.filter((c) => !c.indoor);
     if (outdoor.length) {
         parts.push(`<g class="nx-layer" data-layer="outdoor"><path class="outdoor" style="stroke:none" d="${outdoor.map(cellQuad).join('')}"/></g>`);
@@ -443,7 +478,6 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push('</g>');
     }
 
-    // structural grid (view space)
     if (opts.grid && model.cells.length) {
         const cols = new Set(), rows = new Set();
         for (const c of model.cells) { cols.add(c.y); cols.add(c.y + 1); rows.add(c.x); rows.add(c.x + 1); }
@@ -459,12 +493,8 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
     for (const [layer, cls] of Object.entries(LAYER_CLASS)) {
         const items = model.layers[layer];
         if (!items?.length) continue;
-        parts.push(`<g class="nx-layer" data-layer="${layer}">`);
-        parts.push(`<path class="${cls}" d="${items.map(path).join('')}"/>`);
-        parts.push('</g>');
+        parts.push(`<g class="nx-layer" data-layer="${layer}"><path class="${cls}" d="${items.map(path).join('')}"/></g>`);
     }
-
-    // walls (filled bands; overlapping fills read as one cut)
     if (model.walls.length) {
         const d = model.walls.map(([x0, y0, x1, y1]) => `M${P([x0, y0])}L${P([x1, y0])}L${P([x1, y1])}L${P([x0, y1])}Z`).join('');
         parts.push(`<g class="nx-layer" data-layer="300_WALL_CUT"><path class="wall-cut" d="${d}"/></g>`);
@@ -476,12 +506,11 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push(`<g class="nx-layer" data-layer="300_WALL_ELE"><path class="wall-ele" d="${model.windows.map((l) => `M${P(l[0])}L${P(l[1])}`).join('')}"/></g>`);
     }
 
-    // labels
     if (opts.labels && model.texts.length) {
+        const ls = +opts.labelScale || 1;
         parts.push('<g class="nx-layer" data-layer="labels">');
         for (const t of model.texts) {
             const [x, y] = view([t.x, t.y]);
-            const ls = +opts.labelScale || 1;
             const dy = t.sub ? (t.size === 'l' ? -12 : -10) * ls : 0;
             parts.push(`<text class="lbl-${t.size}" x="${r2(x * S)}" y="${r2(y * S + dy)}">${esc(t.text)}</text>`);
             if (t.sub) parts.push(`<text class="lbl-sub" x="${r2(x * S)}" y="${r2(y * S + (t.size === 'l' ? 16 : 12) * ls)}">${esc(t.sub)}</text>`);
@@ -489,10 +518,8 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push('</g>');
     }
 
-    // overall dimensions (outer wall faces of the occupied cells)
     if (opts.dimensions && model.cells.length) {
-        const indoorCells = model.cells.filter((c) => c.indoor);
-        const cs = indoorCells.length ? indoorCells : model.cells;
+        const cs = indoor.length ? indoor : model.cells;
         const pts = cs.flatMap((c) => [[c.y * CELL, c.x * CELL], [(c.y + 1) * CELL, (c.x + 1) * CELL]]);
         const b = bbox(pts);
         const x0 = b.x0 - EXT_OUT, x1 = b.x1 + EXT_OUT, y0 = b.y0 - EXT_OUT, y1 = b.y1 + EXT_OUT;
@@ -505,6 +532,128 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push(`<text class="dim-t" x="${r2((xd + 0.3) * S)}" y="${r2((y0 + y1) / 2 * S)}" transform="rotate(-90 ${r2((xd + 0.3) * S)} ${r2((y0 + y1) / 2 * S)})">${(y1 - y0).toFixed(2)} m</text>`);
         parts.push('</g>');
     }
+    return parts;
+}
+
+/**
+ * Where the house sits on the plot: module grid centred in the buildable area
+ * (as House.process_building_site does), house footprint anchored to the street
+ * (south, last row) and centred across the width.
+ */
+export function sitePlacement(house, plot) {
+    const [w, d] = plot?.building_site_size ?? [0, 0];
+    const sb = { N: 0, S: 0, E: 0, W: 0, ...(plot?.setbacks ?? {}) };
+    const bw = Math.max(0, w - sb.W - sb.E), bd = Math.max(0, d - sb.N - sb.S);
+    const rows = Math.floor(bd / CELL), cols = Math.floor(bw / CELL);
+    const gx = sb.W + (bw - cols * CELL) / 2, gy = sb.N + (bd - rows * CELL) / 2;
+    let r0 = Infinity, r1 = -Infinity, c0 = Infinity, c1 = -Infinity;
+    for (const mod of house.modules ?? []) {
+        const [r, c] = mod.position;
+        r0 = Math.min(r0, r); r1 = Math.max(r1, r); c0 = Math.min(c0, c); c1 = Math.max(c1, c);
+    }
+    const h = r1 - r0 + 1, bwc = c1 - c0 + 1;
+    const dr = (rows - h) - r0, dc = Math.floor((cols - bwc) / 2) - c0;
+    return {
+        w, d, sb, bw, bd, rows, cols, gx, gy, dr, dc,
+        ox: gx + dc * CELL, oy: gy + dr * CELL,
+        fits: h <= rows && bwc <= cols, footprint: { rows: h, cols: bwc },
+    };
+}
+
+/**
+ * Site plan: plot, setbacks, module grid, street and access, north arrow,
+ * plot dimensions and a scale bar, with the level's floor plan placed on the grid.
+ * @param {object} plot  website / solver PLOT json
+ */
+export function renderSitePlan(lib, solution, level = 0, plot = {}, options = {}) {
+    const house = solution?.house ?? solution;
+    const pl = sitePlacement(house, plot);
+    const { w, d, sb } = pl;
+    const mL = 3.2, mR = 3.2, mT = 4.2, mB = 4.6;
+    const S0 = options.scale ?? DEFAULT_OPTIONS.scale;
+    // text unit: 1/60 of the drawing's larger side, so labels read the same on any plot size
+    const u = Math.max(w + mL + mR, d + mT + mB) * S0 / 60;
+    const opts = { ...DEFAULT_OPTIONS, labelScale: Math.max(1, u * 0.65 / 24), ...options, grid: false, dimensions: false };
+    const S = opts.scale;
+    const vb = [-mL * S, -mT * S, (w + mL + mR) * S, (d + mT + mB) * S];
+    const X = (v) => r2(v * S);
+    const parts = [svgOpen(opts, options, vb, level)];
+    const c = opts.className, f = (v) => r2(v * u);
+    parts.push(`<style>.${c} .site-t{font-size:${f(0.95)}px}.${c} .site-dim{font-size:${f(0.95)}px}.${c} .site-setback{font-size:${f(0.8)}px}`
+        + `.${c} .site-scale{font-size:${f(0.8)}px}.${c} .north-t{font-size:${f(1.1)}px}.${c} .title{font-size:${f(1.35)}px}.${c} .site-warn{font-size:${f(0.9)}px}</style>`);
+    parts.push(`<rect class="bg" x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}"/>`);
+    if (opts.title) parts.push(`<text class="title" x="${X(-mL + 0.6)}" y="${X(-mT + 1.7)}">${esc(opts.title)}</text>`);
+
+    // plot and buildable area
+    parts.push(`<rect class="plot" x="0" y="0" width="${X(w)}" height="${X(d)}"/>`);
+    if (pl.bw > 0 && pl.bd > 0) parts.push(`<rect class="buildable" x="${X(sb.W)}" y="${X(sb.N)}" width="${X(pl.bw)}" height="${X(pl.bd)}"/>`);
+
+    // module grid
+    if (pl.rows > 0 && pl.cols > 0) {
+        const g = [];
+        for (let r = 0; r <= pl.rows; r++) g.push(`M${X(pl.gx)},${X(pl.gy + r * CELL)}H${X(pl.gx + pl.cols * CELL)}`);
+        for (let c = 0; c <= pl.cols; c++) g.push(`M${X(pl.gx + c * CELL)},${X(pl.gy)}V${X(pl.gy + pl.rows * CELL)}`);
+        parts.push(`<path class="site-grid" d="${g.join('')}"/>`);
+    }
+
+    // building
+    const model = buildLevel(lib, house, level, opts);
+    parts.push(`<g transform="translate(${X(pl.ox)} ${X(pl.oy)})">`);
+    if (level > 0) {
+        const below = (house.modules ?? []).filter((mod) => mod.position[2] === 0);
+        const q = below.map((mod) => {
+            const [r, c] = mod.position;
+            return `M${X(c * CELL)},${X(r * CELL)}h${X(CELL)}v${X(CELL)}h${X(-CELL)}Z`;
+        }).join('');
+        if (q) parts.push(`<path class="ghost" d="${q}"/>`);
+    }
+    parts.push(...planBody(model, opts));
+    parts.push('</g>');
+
+    // setback labels (inside each setback strip)
+    const sbl = [];
+    if (sb.N >= 1.2) sbl.push([w / 2, sb.N / 2, 0, `${sb.N.toFixed(1)} m`]);
+    if (sb.S >= 1.2) sbl.push([w / 2, d - sb.S / 2, 0, `${sb.S.toFixed(1)} m`]);
+    if (sb.W >= 1.2) sbl.push([sb.W / 2, d / 2, -90, `${sb.W.toFixed(1)} m`]);
+    if (sb.E >= 1.2) sbl.push([w - sb.E / 2, d / 2, 90, `${sb.E.toFixed(1)} m`]);
+    for (const [x, y, rot, t] of sbl) parts.push(`<text class="site-setback" x="${X(x)}" y="${X(y)}"${rot ? ` transform="rotate(${rot} ${X(x)} ${X(y)})"` : ''}>${t}</text>`);
+
+    // plot dimensions: width above, depth on the left
+    const tk = (x, y) => `M${X(x - 0.18)},${X(y + 0.18)}L${X(x + 0.18)},${X(y - 0.18)}`;
+    const yW = -1.1, xD = -1.1;
+    parts.push(`<path class="site-dimline" d="M0,${X(yW)}H${X(w)}${tk(0, yW)}${tk(w, yW)}M${X(xD)},0V${X(d)}${tk(xD, 0)}${tk(xD, d)}"/>`);
+    parts.push(`<text class="site-dim" x="${X(w / 2)}" y="${X(yW - 0.55)}">${w.toFixed(1)} m</text>`);
+    parts.push(`<text class="site-dim" x="${X(xD - 0.6)}" y="${X(d / 2)}" transform="rotate(-90 ${X(xD - 0.6)} ${X(d / 2)})">${d.toFixed(1)} m</text>`);
+
+    // street and access
+    const acc = { N: false, S: true, E: false, W: false, ...(plot?.access ?? {}) };
+    parts.push(`<path class="street" d="M${X(-mL + 0.4)},${X(d + 1.0)}H${X(w + mR - 0.4)}"/>`);
+    parts.push(`<text class="site-t street-t" x="${X(w / 2)}" y="${X(d + 1.9)}">STREET${acc.S ? ' · main access' : ''}</text>`);
+    const arrow = (x, y, rot) => `<path class="access" transform="translate(${X(x)} ${X(y)}) rotate(${rot})" d="M0,${X(-0.55)}L${X(0.4)},${X(0.25)}L${X(-0.4)},${X(0.25)}Z"/>`;
+    // arrows sit just outside the plot edge, pointing in
+    if (acc.S) parts.push(arrow(w / 2, d + 0.5, 0));
+    if (acc.N) parts.push(arrow(w / 2, -0.5, 180));
+    if (acc.E) parts.push(arrow(w + 0.5, d / 2, -90), `<text class="site-t" x="${X(w + 1.7)}" y="${X(d / 2)}" transform="rotate(90 ${X(w + 1.7)} ${X(d / 2)})">access</text>`);
+    if (acc.W) parts.push(arrow(-0.5, d / 2, 90), `<text class="site-t" x="${X(-2.3)}" y="${X(d / 2 + 4)}" transform="rotate(-90 ${X(-2.3)} ${X(d / 2 + 4)})">access</text>`);
+
+    // north arrow (rotated by the plot's north angle), top right
+    const north = options.north ?? plot?.north_angle ?? 0;
+    const R = Math.max(1.0, u * 1.5 / S), nx = w + mR - R - 0.9, ny = -mT + R + 1.3;
+    parts.push(`<g class="north" transform="translate(${X(nx)} ${X(ny)})">`
+        + `<circle class="north-ring" r="${X(R)}"/>`
+        + `<g transform="rotate(${r2(north)})">`
+        + `<path class="north-fill" d="M0,${X(-R * 0.92)}L${X(R * 0.36)},${X(R * 0.55)}L0,${X(R * 0.25)}Z"/>`
+        + `<path class="north-open" d="M0,${X(-R * 0.92)}L${X(-R * 0.36)},${X(R * 0.55)}L0,${X(R * 0.25)}Z"/>`
+        + `<text class="north-t" x="0" y="${r2(-X(R) - u * 1.1)}" transform="rotate(${r2(-north)} 0 ${r2(-X(R) - u * 0.75)})">N</text>`
+        + '</g></g>');
+
+    // scale bar 0-5-10 m, bottom left
+    const sx = -mL + 0.6, sy = d + 3.2, seg = 2.5;
+    const bars = [0, 1, 2, 3].map((i) => `<rect class="${i % 2 ? 'scale-b' : 'scale-a'}" x="${X(sx + i * seg)}" y="${X(sy)}" width="${X(seg)}" height="${X(0.28)}"/>`).join('');
+    parts.push(`<g class="scale">${bars}`
+        + [0, 5, 10].map((v) => `<text class="site-scale" x="${X(sx + v)}" y="${r2(X(sy + 0.28) + u * 0.9)}">${v}${v === 10 ? ' m' : ''}</text>`).join('')
+        + '</g>');
+    if (!pl.fits) parts.push(`<text class="site-warn" x="${X(w / 2)}" y="${X(d + 3.45)}">Layout footprint ${pl.footprint.rows}×${pl.footprint.cols} is larger than the plot grid ${pl.rows}×${pl.cols}</text>`);
 
     parts.push('</svg>');
     return parts.join('');

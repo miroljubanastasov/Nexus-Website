@@ -1,5 +1,5 @@
 import SvgManager from './svg-manager.js'
-import { loadModuleLibrary, renderPlan } from '../plan/plan-renderer.js'
+import { loadModuleLibrary, renderPlan, renderSitePlan } from '../plan/plan-renderer.js'
 
 // Plan engine:
 //   'local'   (default) draw plans in the browser from assets/modules/module_library.json
@@ -225,19 +225,24 @@ async function renderLocally(solutionData, plotData) {
     const levels = [...new Set((house?.modules ?? []).map((m) => m.position?.[2] ?? 0))].sort((a, b) => a - b);
     const levelsCount = levels.length || 1;
 
+    // keep the level the user is looking at across live updates
+    const keepIndex = svgManager.carouselData?.length ? svgManager.currentCarouselIndex : 0;
+    const site = (window.NEXUS_PLAN_VIEW ?? 'site') === 'site' && plotData?.building_site_size;
+
     window.showCanvas();
-    svgManager.showLoading();
     svgManager.initializeProgressiveCarousel(levelsCount);
     window.dispatchEvent(new CustomEvent('nexus:svgInit', { detail: { levelsCount } }));
 
     for (const level of levels) {
         const displayTitle = level === 0 ? 'Ground Floor' : `Level ${level}`;
-        const svgContent = renderPlan(lib, house, level, { title: displayTitle, plot: plotData });
+        const svgContent = site
+            ? renderSitePlan(lib, house, level, plotData, { title: displayTitle })
+            : renderPlan(lib, house, level, { title: displayTitle, plot: plotData });
         window.dispatchEvent(new CustomEvent('nexus:svgLevel', { detail: { level, title: displayTitle, svgContent } }));
         loadSvgIntoCarousel(level, svgContent, displayTitle);
     }
+    if (keepIndex > 0) svgManager.loadCarouselLevel(Math.min(keepIndex, levelsCount - 1));
     window.dispatchEvent(new CustomEvent('nexus:svgDone'));
-    showStatus(`All ${levelsCount} floor plan levels generated`, 'success');
 }
 
 // UI Helper functions

@@ -91,3 +91,16 @@ PYTHONPATH=src python -m mind.training.export_configurator \
   plans, and lets you step through the next closest matches
 
 Add `?solver=api` to use the Python solver service on `localhost:8080` instead.
+
+## Site plan
+
+`renderSitePlan(lib, house, level, plot, options)` draws the level on its plot:
+- plot boundary, setbacks (labelled) and the buildable area
+- the 3.75 m module grid centred in the buildable area, as `House.process_building_site` does it
+- the house anchored to the street edge and centred across the width (`sitePlacement`)
+- the ground floor ghosted under upper levels
+- plot dimensions, street and access arrows, a north arrow turned by `plot.north_angle`,
+  and a 0–10 m scale bar
+
+Text size follows the plot size. In `floorplans.html` the Site / Building switch picks the
+drawing, and **Live update** re-picks the layout and redraws whenever the brief or site changes.

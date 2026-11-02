@@ -107,13 +107,41 @@ export async function initMlPanel(configManager) {
     $('prevExampleBtn')?.addEventListener('click', () => showExample(-1));
     $('nextExampleBtn')?.addEventListener('click', () => showExample(1));
 
+    // Live update: every brief/site change re-picks the closest layout and redraws (cheap, all in-browser)
+    const live = () => SOLVER_MODE === 'ml' && $('liveUpdate')?.checked !== false;
     let timer = null;
-    const schedule = () => { clearTimeout(timer); timer = setTimeout(renderFeasibility, 60); };
+    let busy = false, pending = false;
+    async function refreshLayout() {
+        if (busy) { pending = true; return; }
+        busy = true;
+        try { await configManager.solveHouse(); } finally {
+            busy = false;
+            if (pending) { pending = false; refreshLayout(); }
+        }
+    }
+    const schedule = (e) => {
+        // view switch and live toggle are not part of the brief
+        if (e?.target && ['planView', 'liveUpdate'].includes(e.target.name || e.target.id)) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            renderFeasibility();
+            if (live()) refreshLayout();
+        }, 150);
+    };
     configManager.form?.addEventListener('input', schedule);
     configManager.form?.addEventListener('change', schedule);
+
+    // Site / Building drawing
+    document.querySelectorAll('input[name="planView"]').forEach((r) => r.addEventListener('change', () => {
+        window.NEXUS_PLAN_VIEW = r.value;
+        if (configManager.currentSolution) configManager.generateFloorPlanFromSolution();
+    }));
+    $('liveUpdate')?.addEventListener('change', (e) => { if (e.target.checked) refreshLayout(); });
     // Imported projects set values programmatically
     window.addEventListener('nexus:configLoaded', schedule);
     renderFeasibility();
+    // Open with a layout for the default brief, so the canvas is never empty
+    if (live()) refreshLayout();
 
     return { model, refresh: renderFeasibility };
 }
