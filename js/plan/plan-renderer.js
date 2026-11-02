@@ -65,6 +65,7 @@ export const DEFAULT_OPTIONS = {
     grid: true,
     dimensions: true,
     title: null,               // e.g. 'Ground floor'
+    labelScale: 1,             // multiply label / dimension text size (e.g. 2-3 for small embeds)
     north: null,               // degrees; defaults to plot.north_angle when plot given
     className: 'nx-plan',
     // Optional per-level colouring of room footprints: { [type]: '#hex' }
@@ -421,6 +422,10 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
     const parts = [];
     parts.push(`<svg xmlns="http://www.w3.org/2000/svg" class="${opts.className}${options.autoDark === false ? '' : ' nx-auto'}" viewBox="${vb.map(r2).join(' ')}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" data-level="${level}" role="img" aria-label="${esc(opts.title ?? LEVEL_NAMES[level] ?? `Level ${level}`)}">`);
     parts.push(`<style>${STYLE}</style>`);
+    if (opts.labelScale !== 1) {
+        const k = +opts.labelScale || 1;
+        parts.push(`<style>.${opts.className} .lbl-l{font-size:${24 * k}px}.${opts.className} .lbl-s{font-size:${19 * k}px}.${opts.className} .lbl-sub{font-size:${16 * k}px}.${opts.className} .dim-t{font-size:${22 * k}px}</style>`);
+    }
     parts.push(`<rect class="bg" x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}"/>`);
     if (opts.title) parts.push(`<text class="title" x="0" y="${r2((-m - top / 2 + 0.6) * S)}">${esc(opts.title)}</text>`);
 
@@ -476,9 +481,10 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push('<g class="nx-layer" data-layer="labels">');
         for (const t of model.texts) {
             const [x, y] = view([t.x, t.y]);
-            const dy = t.sub ? (t.size === 'l' ? -12 : -10) : 0;
+            const ls = +opts.labelScale || 1;
+            const dy = t.sub ? (t.size === 'l' ? -12 : -10) * ls : 0;
             parts.push(`<text class="lbl-${t.size}" x="${r2(x * S)}" y="${r2(y * S + dy)}">${esc(t.text)}</text>`);
-            if (t.sub) parts.push(`<text class="lbl-sub" x="${r2(x * S)}" y="${r2(y * S + (t.size === 'l' ? 16 : 12))}">${esc(t.sub)}</text>`);
+            if (t.sub) parts.push(`<text class="lbl-sub" x="${r2(x * S)}" y="${r2(y * S + (t.size === 'l' ? 16 : 12) * ls)}">${esc(t.sub)}</text>`);
         }
         parts.push('</g>');
     }

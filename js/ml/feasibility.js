@@ -9,7 +9,7 @@
  *   types     module type ids/names, indexed by the library
  *   library   solved layouts: b = brief, s = site, g = grid shape,
  *             m = flat [typeIndex, row, col, level, rotation] * n,
- *             h = (optional) full post-processed house JSON (flip, partitions)
+ *             h | house = (optional) full post-processed house JSON (flip, partitions)
  *
  * The feature and brief logic mirrors mind.training.train_feasibility.featurize
  * and Brief.load_modules (ported from Nexus_Mind docs/configurator). Keep the
@@ -232,8 +232,9 @@ export class FeasibilityModel {
     toSolution(idx) {
         const ex = this.library[idx];
         let house;
-        if (ex.h) {
-            house = structuredClone(ex.h.house ?? ex.h);
+        const full = ex.h ?? ex.house;   // post-processed house_to_json, when exported
+        if (full) {
+            house = structuredClone(full.house ?? full);
         } else {
             const modules = [];
             for (let i = 0; i < ex.m.length; i += 5) {
@@ -257,7 +258,7 @@ export class FeasibilityModel {
         };
         return {
             house,
-            source: { kind: 'ml-library', index: idx, originalSite: { w: ex.s[0], d: ex.s[1], levels: ex.s[2] }, hasPostProcess: !!ex.h },
+            source: { kind: 'ml-library', index: idx, originalSite: { w: ex.s[0], d: ex.s[1], levels: ex.s[2] }, hasPostProcess: !!(ex.h ?? ex.house) },
         };
     }
 }
