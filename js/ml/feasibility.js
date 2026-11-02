@@ -9,7 +9,8 @@
  *   types     module type ids/names, indexed by the library
  *   library   solved layouts: b = brief, s = site, g = grid shape,
  *             m = flat [typeIndex, row, col, level, rotation] * n,
- *             h | house = (optional) full post-processed house JSON (flip, partitions)
+ *             h = (optional) compact drawing data {m: [ti,row,col,level,rot,flip,indoor,sky], p: [pi,row,col,level,rot,flip]}
+ *                 with partition type ids in data.partition_types; a full house_to_json object is also accepted
  *
  * The feature and brief logic mirrors mind.training.train_feasibility.featurize
  * and Brief.load_modules (ported from Nexus_Mind docs/configurator). Keep the
@@ -232,8 +233,18 @@ export class FeasibilityModel {
     toSolution(idx) {
         const ex = this.library[idx];
         let house;
-        const full = ex.h ?? ex.house;   // post-processed house_to_json, when exported
-        if (full) {
+        const full = ex.h ?? ex.house;   // post-processed drawing data, when exported
+        if (full && Array.isArray(full.m)) {
+            // compact export: m = [ti, row, col, level, rot, flip, is_indoor, open_to_sky], p = [pi, row, col, level, rot, flip]
+            const ptypes = this.data.partition_types ?? [];
+            const modules = full.m.map(([ti, row, col, level, rotation, f, i, o]) => {
+                const type = this.typeIds[ti];
+                return { name: this.typeName[type] || type, type, position: [row, col, level], rotation, flip: !!f, is_indoor: !!i, open_to_sky: !!o };
+            });
+            const partitions = (full.p ?? []).map(([pi, row, col, level, rotation, f]) => ({ type: ptypes[pi], cell: [row, col], level, rotation, flip: !!f }))
+                .filter((q) => q.type);
+            house = { grid_shape: [ex.g[0], ex.g[1], ex.usedLevels], grid_size: GRID, modules, partitions };
+        } else if (full) {
             house = structuredClone(full.house ?? full);
         } else {
             const modules = [];
