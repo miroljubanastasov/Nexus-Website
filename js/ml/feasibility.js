@@ -227,10 +227,17 @@ export class FeasibilityModel {
             const turnPlain = ang(e.s[3]), turnMirror = ang(360 - e.s[3]);
             const mirror = turnMirror + 1e-6 < turnPlain;
             const turn = mirror ? turnMirror : turnPlain;
-            const score = diff * 10 + dh * 12 + over * 60 + turn * 0.06 + (mirror ? 0.5 : 0)
+            // side access (exports with e.acc = [S, N, E, W]); a mirrored layout swaps E and W
+            let access = 0;
+            if (Array.isArray(e.acc)) {
+                const [aS, aN, aE, aW] = e.acc;
+                const ex = { S: aS, N: aN, E: mirror ? aW : aE, W: mirror ? aE : aW };
+                for (const k of ['S', 'N', 'E', 'W']) access += Number(!!ex[k] !== !!site.access[k]);
+            }
+            const score = diff * 10 + dh * 12 + over * 60 + turn * 0.06 + access * 4 + (mirror ? 0.5 : 0)
                 + Math.abs(e.usedLevels - Math.min(site.levels, e.s[2])) * 2
                 + Math.abs(e.s[2] - site.levels) * 2 + 0.3 * ((rows - e.box.h) + (cols - e.box.w));
-            return { idx, score, diff, turn, mirror, fits: over === 0 };
+            return { idx, score, diff, turn, mirror, access, fits: over === 0 };
         });
         scored.sort((a, b) => a.score - b.score);
         return { want, top: scored.slice(0, top) };
