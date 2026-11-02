@@ -1,0 +1,988 @@
+{
+ "source": "Nexus_Element_Configurator/ModuleConfig.xlsx",
+ "notes": {
+  "flags": "MODULES columns as in the workbook: CIRC circulation, VAL max tree degree, FAC needs facade, PRIV/VIEW/SOLAR requirement, PRIM primary orientation, INDOOR, ACCESS needs access cell, GROUND level 0 only, DOUBLE double-height capable, FAC_N/E/S/W allowed facade sides in module-local frame, OTS open to sky, PART partition level, SYM symmetric block.",
+  "reward": "REWARD MATRIX entries > 0 as [a, b, value] (upper triangle as in the workbook; treat as symmetric). A pair is an allowed connection if it has reward > 0 or adjacency regulation > 0; weight = value * 10.",
+  "adjacency": "ADJECENCY REGULATION entries > 0: mandatory connections (edge must be active on exactly one level when both modules are placed).",
+  "rotation_pairs": "Allowed [rot_a, rot_b] when module b is the neighbour of a in direction dir (element_house_solver.module_orientation_const).",
+  "facade_rotation": "A facade on world side d_f is allowed for rotation k if the module-local side (d_f + k) mod 4 has FAC_<side> true, sides indexed N=0,E=1,S=2,W=3 (val = (d_m - d_f) % 4 in the solver).",
+  "brief_rules": "Brief.load_modules: shared bathroom per 2 bedrooms (incl. guest); stairs = one per level when max_levels > 1 (House); voids CON_00 for double-height living/dining with module_below."
+ },
+ "modules": {
+  "NX_ELE_ENT_00": {
+   "TYPE_ID": "NX_ELE_ENT_00",
+   "NAME": "Entrance",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": true,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": false,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_LIV_00": {
+   "TYPE_ID": "NX_ELE_LIV_00",
+   "NAME": "Living Room",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": true,
+   "SOLAR": true,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": true,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_DIN_00": {
+   "TYPE_ID": "NX_ELE_DIN_00",
+   "NAME": "Dinning",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 3,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": true,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_KIT_00": {
+   "TYPE_ID": "NX_ELE_KIT_00",
+   "NAME": "Kitchen",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": false,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_SBR_00": {
+   "TYPE_ID": "NX_ELE_SBR_00",
+   "NAME": "Single Bedroom",
+   "OCC": 1,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": true,
+   "PRIV": true,
+   "VIEW": false,
+   "SOLAR": true,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": false,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 0,
+   "SYM": false
+  },
+  "NX_ELE_MBR_00": {
+   "TYPE_ID": "NX_ELE_MBR_00",
+   "NAME": "Master Bedroom",
+   "OCC": 2,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": true,
+   "PRIV": true,
+   "VIEW": true,
+   "SOLAR": true,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": true,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 0,
+   "SYM": false
+  },
+  "NX_ELE_MBA_00": {
+   "TYPE_ID": "NX_ELE_MBA_00",
+   "NAME": "Master Bathroom",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 2,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 0,
+   "SYM": true
+  },
+  "NX_ELE_SBA_00": {
+   "TYPE_ID": "NX_ELE_SBA_00",
+   "NAME": "Shared Bathroom",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_TRA_00": {
+   "TYPE_ID": "NX_ELE_TRA_00",
+   "NAME": "Technik Raum",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 2,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": false,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_STA_00": {
+   "TYPE_ID": "NX_ELE_STA_00",
+   "NAME": "Stairs",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_OFF_00": {
+   "TYPE_ID": "NX_ELE_OFF_00",
+   "NAME": "Office",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 1,
+   "SYM": true
+  },
+  "NX_ELE_LIB_00": {
+   "TYPE_ID": "NX_ELE_LIB_00",
+   "NAME": "Library",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 1,
+   "SYM": true
+  },
+  "NX_ELE_PBR_00": {
+   "TYPE_ID": "NX_ELE_PBR_00",
+   "NAME": "Parents Bedroom",
+   "OCC": 2,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": true,
+   "PRIV": true,
+   "VIEW": false,
+   "SOLAR": true,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": true,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 0,
+   "SYM": false
+  },
+  "NX_ELE_PBA_00": {
+   "TYPE_ID": "NX_ELE_PBA_00",
+   "NAME": "Parents Bathroom",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_GBR_00": {
+   "TYPE_ID": "NX_ELE_GBR_00",
+   "NAME": "Guest Bedroom",
+   "OCC": 2,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": true,
+   "FAC_S": false,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 0,
+   "SYM": false
+  },
+  "NX_ELE_SPA_00": {
+   "TYPE_ID": "NX_ELE_SPA_00",
+   "NAME": "Spa",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_CON_00": {
+   "TYPE_ID": "NX_ELE_CON_00",
+   "NAME": "Connecting Void",
+   "DES": "Void module with a corridor",
+   "OCC": 0,
+   "CIRC": true,
+   "VAL": 3,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": false,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": false,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_EPO_00": {
+   "TYPE_ID": "NX_ELE_EPO_00",
+   "NAME": "Entrance Porch",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": false,
+   "ACCESS": true,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": false,
+   "FAC_W": false,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_GAR_00": {
+   "TYPE_ID": "NX_ELE_GAR_00",
+   "NAME": "Garden",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 1,
+   "FAC": false,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": false,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": false,
+   "FAC_E": false,
+   "FAC_S": false,
+   "FAC_W": false,
+   "OTS": true,
+   "PART": 2,
+   "SYM": true
+  },
+  "NX_ELE_KIT_01": {
+   "TYPE_ID": "NX_ELE_KIT_01",
+   "NAME": "Kitchen and Dinning",
+   "OCC": 0,
+   "CIRC": false,
+   "VAL": 3,
+   "FAC": true,
+   "PRIV": false,
+   "VIEW": false,
+   "SOLAR": false,
+   "PRIM": false,
+   "INDOOR": true,
+   "ACCESS": false,
+   "GROUND": true,
+   "DOUBLE": false,
+   "FAC_N": true,
+   "FAC_E": true,
+   "FAC_S": true,
+   "FAC_W": true,
+   "OTS": false,
+   "PART": 2,
+   "SYM": true
+  }
+ },
+ "reward": [
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_LIV_00",
+   1.0
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_DIN_00",
+   1.0
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_KIT_00",
+   0.2
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_MBA_00",
+   0.2
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_SBA_00",
+   0.2
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_STA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_PBA_00",
+   0.2
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_EPO_00",
+   1.0
+  ],
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_KIT_01",
+   0.5
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_DIN_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_KIT_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_SBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_STA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_OFF_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_LIB_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_PBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_GAR_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_KIT_01",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_KIT_00",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_MBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_SBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_STA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_OFF_00",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_LIB_00",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_PBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_GAR_00",
+   0.2
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_MBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_SBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_TRA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_STA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_OFF_00",
+   0.5
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_KIT_00",
+   "NX_ELE_GAR_00",
+   0.2
+  ],
+  [
+   "NX_ELE_SBR_00",
+   "NX_ELE_SBA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_MBR_00",
+   "NX_ELE_MBA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_MBR_00",
+   "NX_ELE_OFF_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBR_00",
+   "NX_ELE_LIB_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBA_00",
+   "NX_ELE_STA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBA_00",
+   "NX_ELE_OFF_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBA_00",
+   "NX_ELE_LIB_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBA_00",
+   "NX_ELE_SPA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_MBA_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_STA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_OFF_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_PBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_GBR_00",
+   1.0
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_SPA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SBA_00",
+   "NX_ELE_KIT_01",
+   0.5
+  ],
+  [
+   "NX_ELE_TRA_00",
+   "NX_ELE_STA_00",
+   0.2
+  ],
+  [
+   "NX_ELE_TRA_00",
+   "NX_ELE_KIT_01",
+   1.0
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_OFF_00",
+   1.0
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_LIB_00",
+   0.5
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_PBA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_SPA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_STA_00",
+   "NX_ELE_KIT_01",
+   0.5
+  ],
+  [
+   "NX_ELE_OFF_00",
+   "NX_ELE_LIB_00",
+   1.0
+  ],
+  [
+   "NX_ELE_OFF_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_LIB_00",
+   "NX_ELE_SPA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_LIB_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_PBR_00",
+   "NX_ELE_PBA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_PBR_00",
+   "NX_ELE_KIT_01",
+   0.5
+  ],
+  [
+   "NX_ELE_PBA_00",
+   "NX_ELE_SPA_00",
+   0.5
+  ],
+  [
+   "NX_ELE_PBA_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_SPA_00",
+   "NX_ELE_CON_00",
+   0.5
+  ],
+  [
+   "NX_ELE_CON_00",
+   "NX_ELE_KIT_01",
+   0.5
+  ]
+ ],
+ "adjacency": [
+  [
+   "NX_ELE_ENT_00",
+   "NX_ELE_EPO_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_DIN_00",
+   1.0
+  ],
+  [
+   "NX_ELE_LIV_00",
+   "NX_ELE_KIT_01",
+   1.0
+  ],
+  [
+   "NX_ELE_DIN_00",
+   "NX_ELE_KIT_00",
+   1.0
+  ],
+  [
+   "NX_ELE_MBR_00",
+   "NX_ELE_MBA_00",
+   1.0
+  ],
+  [
+   "NX_ELE_PBR_00",
+   "NX_ELE_PBA_00",
+   1.0
+  ]
+ ],
+ "rotation_pairs": {
+  "N": [
+   [
+    0,
+    1
+   ],
+   [
+    0,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "E": [
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "S": [
+   [
+    2,
+    3
+   ],
+   [
+    2,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "W": [
+   [
+    3,
+    0
+   ],
+   [
+    3,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    2
+   ]
+  ]
+ },
+ "objective": {
+  "compactness": "envelope",
+  "av_reference": 0.95,
+  "connectivity_tolerance": 0.9,
+  "wall_weight": "grid*floor_height",
+  "flat_weight": "grid^2",
+  "scale_reward": 10
+ }
+}
