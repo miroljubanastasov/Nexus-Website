@@ -367,12 +367,12 @@ const STYLE = `
 .nx-plan .grid{stroke:var(--nx-light);stroke-width:.5;stroke-dasharray:8 4 1 4}
 .nx-plan .dim{stroke:var(--nx-mid);stroke-width:.6}
 .nx-plan text{fill:var(--nx-ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-anchor:middle;dominant-baseline:middle}
-.nx-plan .lbl-l{font-size:22px;font-weight:600}
-.nx-plan .lbl-s{font-size:15px;font-weight:500}
-.nx-plan .lbl-sub{font-size:13px;fill:var(--nx-mid)}
-.nx-plan .dim-t{font-size:15px;fill:var(--nx-mid)}
+.nx-plan .lbl-l{font-size:24px;font-weight:600}
+.nx-plan .lbl-s{font-size:19px;font-weight:500}
+.nx-plan .lbl-sub{font-size:16px;fill:var(--nx-mid)}
+.nx-plan .dim-t{font-size:22px;fill:var(--nx-mid)}
 .nx-plan .grid-t{font-size:13px;fill:var(--nx-mid)}
-.nx-plan .title{font-size:26px;font-weight:600;text-anchor:start}
+.nx-plan .title{font-size:30px;font-weight:600;text-anchor:start}
 `;
 
 const LAYER_CLASS = {
@@ -476,9 +476,9 @@ export function renderPlan(lib, solution, level = 0, options = {}) {
         parts.push('<g class="nx-layer" data-layer="labels">');
         for (const t of model.texts) {
             const [x, y] = view([t.x, t.y]);
-            const dy = t.sub ? (t.size === 'l' ? -11 : -8) : 0;
+            const dy = t.sub ? (t.size === 'l' ? -12 : -10) : 0;
             parts.push(`<text class="lbl-${t.size}" x="${r2(x * S)}" y="${r2(y * S + dy)}">${esc(t.text)}</text>`);
-            if (t.sub) parts.push(`<text class="lbl-sub" x="${r2(x * S)}" y="${r2(y * S + (t.size === 'l' ? 14 : 10))}">${esc(t.sub)}</text>`);
+            if (t.sub) parts.push(`<text class="lbl-sub" x="${r2(x * S)}" y="${r2(y * S + (t.size === 'l' ? 16 : 12))}">${esc(t.sub)}</text>`);
         }
         parts.push('</g>');
     }

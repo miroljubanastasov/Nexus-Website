@@ -1,5 +1,6 @@
 import ConfigManager from './config-manager.js';
 import { computeFromSolution } from './get_flooplan.js';
+import { initMlPanel } from './ml-panel.js';
 
 // Canvas management functions (updated for fixed layout)
 function showCanvas() {
@@ -37,6 +38,7 @@ window.hideSolution = hideSolution;
 document.addEventListener('DOMContentLoaded', () => {
     const configManager = new ConfigManager();
     configManager.setComputeFunction(computeFromSolution);
+    initMlPanel(configManager);
     // Optionally expose for debugging
     window.nexusConfigManager = configManager;
 });

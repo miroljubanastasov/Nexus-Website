@@ -300,6 +300,53 @@
                     </div>
                 </div>
 
+                <!-- FEASIBILITY (ML model, updates live with the form) -->
+                <div class="card border-0 shadow-sm mb-3" id="feasibilityCard" aria-live="polite">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small text-uppercase fw-bold text-secondary">
+                                <i class="fas fa-chart-line me-1"></i>Feasibility
+                            </span>
+                            <span class="badge rounded-pill text-bg-secondary" id="feasState">Loading model…</span>
+                        </div>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="fs-2 fw-semibold" id="feasProb">–</span>
+                            <span class="small text-muted">chance the solver finds a layout</span>
+                        </div>
+                        <div class="progress mt-1" role="progressbar" aria-label="Feasibility" style="height: 6px;">
+                            <div class="progress-bar bg-secondary" id="feasBar" style="width: 0%"></div>
+                        </div>
+                        <div class="row g-1 small text-muted mt-2 text-center" id="feasStats">
+                            <div class="col-3"><div class="fw-semibold text-dark" id="statModules">–</div>modules</div>
+                            <div class="col-3"><div class="fw-semibold text-dark" id="statArea">–</div>indoor</div>
+                            <div class="col-3"><div class="fw-semibold text-dark" id="statGrid">–</div>grid</div>
+                            <div class="col-3"><div class="fw-semibold text-dark" id="statSlack">–</div>spare cells</div>
+                        </div>
+                        <ul class="small text-muted mt-2 mb-0 ps-3" id="feasNotes"></ul>
+                    </div>
+                </div>
+
+                <!-- CLOSEST SOLVED EXAMPLE (shown after Find Layout) -->
+                <div class="card border-0 shadow-sm mb-3 d-none" id="exampleCard">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small text-uppercase fw-bold text-secondary">
+                                <i class="fas fa-layer-group me-1"></i>Layout
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Browse examples">
+                                <button type="button" class="btn btn-outline-secondary" id="prevExampleBtn" aria-label="Previous example">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" id="nextExampleBtn" aria-label="Next example">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="small" id="exampleCaption"></div>
+                        <div class="d-flex flex-wrap gap-1 mt-2" id="exampleDiff"></div>
+                    </div>
+                </div>
+
                 <!-- ACTION BUTTONS -->
                 <div class="d-grid gap-2">
                     <button type="button" class="btn btn-primary" id="solveHouseBtn">
@@ -332,7 +379,7 @@
                         <div class="text-center text-muted small">
                             <i class="fas fa-home fa-3x mb-3"></i>
                             <p class="mb-0">Canvas Ready</p>
-                            <small>Run Solve + Generate to display plans</small>
+                            <small>Set the brief and site, then Find Layout</small>
                         </div>
                     </div>
                 </div>

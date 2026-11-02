@@ -12,6 +12,9 @@ class ConfigManager {
         this.currentSVGs = [];      // Store generated SVGs [{level,title,svgContent}]
         this.currentLevelsCount = 0; // Track levels count for current SVG set
         this.computeFromSolution = null; // Store the compute function reference
+        this.solver = null;          // optional (brief, plot) => {success, solution, error}; defaults to the solver API
+        this.autoGenerate = false;   // generate plans right after a successful solve
+        this.solveLabel = 'Solve House';
         this.initializeEventListeners();
     }
 
@@ -201,6 +204,7 @@ class ConfigManager {
         }
 
         this.validateConfiguration();
+        window.dispatchEvent(new CustomEvent('nexus:configLoaded'));
     }
 
     /**
@@ -570,8 +574,10 @@ class ConfigManager {
             const briefJson = this.generateBriefJson();
             const plotJson = this.generatePlotJson();
 
-            // Send to solver
-            const result = await this.sendToSolver(briefJson, plotJson);
+            // Send to solver (ML layout library by default, see js/floorplans/ml-panel.js)
+            const result = this.solver
+                ? await this.solver(briefJson, plotJson)
+                : await this.sendToSolver(briefJson, plotJson);
 
             if (result.success) {
                 // Log API status and solution JSON
@@ -591,7 +597,7 @@ class ConfigManager {
                 this.toggleGenerateButtons(true);
                 this.toggleSolutionExport(true);
                 this.toggleProjectExport(true);
-                // Already opened above
+                if (this.autoGenerate) await this.generateFloorPlanFromSolution();
             } else {
                 this.dbg('❌ API Status: FAILED');
                 this.dbg('❌ Error:', result.error);
@@ -688,9 +694,9 @@ class ConfigManager {
         if (btn) {
             btn.disabled = !enabled;
             if (enabled) {
-                btn.innerHTML = '<i class="fas fa-cog me-2"></i>Solve House';
+                btn.innerHTML = `<i class="fas fa-cog me-2"></i>${this.solveLabel}`;
             } else {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Solving...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Working...';
             }
         }
     }

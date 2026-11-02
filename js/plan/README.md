@@ -73,3 +73,21 @@ See `DEFAULT_OPTIONS` in `plan-renderer.js`: `furniture`, `entourage`, `labels`,
 
 In `floorplans.html` this renderer is the default. Add `?engine=compute` to use the old
 Rhino Compute path instead.
+
+## Feasibility model and layout library
+
+`js/ml/feasibility.js` runs the Nexus_Mind feasibility model (gradient-boosted trees) and
+the library of solved layouts in the browser. Its data file is `assets/ml/configurator_data.json`.
+To update it after retraining, run this in Nexus_Mind:
+
+```
+PYTHONPATH=src python -m mind.training.export_configurator \
+    --out ../Nexus-Website/assets/ml/configurator_data.json
+```
+
+`js/floorplans/ml-panel.js` connects it to `floorplans.html`:
+- a live feasibility estimate in the side panel, updated as the form changes
+- **Find Layout**, which takes the closest solved layout for the brief and site, draws its
+  plans, and lets you step through the next closest matches
+
+Add `?solver=api` to use the Python solver service on `localhost:8080` instead.
