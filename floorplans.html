@@ -24,7 +24,7 @@
     </script>
 </head>
 
-<body>
+<body class="fp-page">
 
     <!-- NAVBAR (consistent with other pages) -->
     <nav class="navbar navbar-expand-md bg-light sticky-top border-bottom" data-bs-theme="light">
@@ -60,343 +60,202 @@
     </nav>
 
     <!-- MAIN LAYOUT CONTAINER -->
-    <div class="d-flex" style="height: calc(100vh - 76px);">
+    <div class="d-flex app-shell">
         <!-- SIDEBAR PANEL -->
-        <div class="sidebar-panel bg-light border-end p-3" style="width: 400px; overflow-y: auto;">
-            <form id="configForm">
-                <!-- BRIEF SECTION -->
-                <div class="accordion mb-4" id="configAccordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#briefCollapse" aria-expanded="true" aria-controls="briefCollapse">
-                                <i class="fas fa-clipboard-list me-2"></i>Project Brief
-                            </button>
-                        </h2>
-                        <div id="briefCollapse" class="accordion-collapse collapse show"
-                            data-bs-parent="#configAccordion">
-                            <div class="accordion-body">
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <label for="bedrooms" class="form-label">Bedrooms</label>
-                                        <input type="number" class="form-control" id="bedrooms" value="2" min="1"
-                                            max="5">
+        <aside class="sidebar-panel border-end" aria-label="House configuration">
+            <form id="configForm" novalidate>
+
+                <!-- RESULT: feasibility of the current brief on the current site -->
+                <section class="panel-result" id="feasibilityCard" aria-live="polite">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="panel-eyebrow">Feasibility</span>
+                        <span class="badge rounded-pill text-bg-secondary" id="feasState">Loading model…</span>
+                    </div>
+                    <div class="d-flex align-items-baseline gap-2 mt-1">
+                        <span class="feas-number" id="feasProb">–</span>
+                        <span class="small text-muted">chance the solver finds a layout</span>
+                    </div>
+                    <div class="progress mt-2" role="progressbar" aria-label="Feasibility" aria-valuemin="0" aria-valuemax="100" style="height: 6px;">
+                        <div class="progress-bar bg-secondary" id="feasBar" style="width: 0%"></div>
+                    </div>
+                    <dl class="stat-row mt-3 mb-0" id="feasStats">
+                        <div><dt>Modules</dt><dd id="statModules">–</dd></div>
+                        <div><dt>Indoor</dt><dd id="statArea">–</dd></div>
+                        <div><dt>Grid</dt><dd id="statGrid">–</dd></div>
+                        <div><dt>Spare cells</dt><dd id="statSlack">–</dd></div>
+                    </dl>
+                    <ul class="feas-notes small text-muted mt-2 mb-0" id="feasNotes"></ul>
+                </section>
+
+                <!-- BRIEF -->
+                <section class="panel-section">
+                    <button class="panel-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#briefCollapse"
+                        aria-expanded="true" aria-controls="briefCollapse">
+                        <span><i class="fas fa-clipboard-list me-2"></i>Brief</span><i class="fas fa-chevron-down toggle-icon"></i>
+                    </button>
+                    <div id="briefCollapse" class="collapse show">
+                        <div class="panel-body">
+                            <div class="field-label" id="bedroomsLabel">Bedrooms</div>
+                            <div class="btn-group w-100 seg" role="group" aria-labelledby="bedroomsLabel" data-target="bedrooms">
+                                <input type="radio" class="btn-check" name="bedroomsPick" id="bed1" value="1"><label class="btn btn-outline-secondary" for="bed1">1</label>
+                                <input type="radio" class="btn-check" name="bedroomsPick" id="bed2" value="2" checked><label class="btn btn-outline-secondary" for="bed2">2</label>
+                                <input type="radio" class="btn-check" name="bedroomsPick" id="bed3" value="3"><label class="btn btn-outline-secondary" for="bed3">3</label>
+                                <input type="radio" class="btn-check" name="bedroomsPick" id="bed4" value="4"><label class="btn btn-outline-secondary" for="bed4">4</label>
+                            </div>
+                            <input type="hidden" id="bedrooms" value="2">
+
+                            <div class="field-label mt-3">Rooms</div>
+                            <div class="toggle-grid">
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="guest"><label class="form-check-label" for="guest">Guest room</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="parents"><label class="form-check-label" for="parents">Parents suite</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="office" checked><label class="form-check-label" for="office">Office</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="library"><label class="form-check-label" for="library">Library</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="spa"><label class="form-check-label" for="spa">Spa</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="garden" checked><label class="form-check-label" for="garden">Garden</label></div>
+                            </div>
+
+                            <div class="field-label mt-3">Living &amp; kitchen</div>
+                            <div class="toggle-grid">
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="largeLivingRoom"><label class="form-check-label" for="largeLivingRoom">Large living</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="compactKitchen"><label class="form-check-label" for="compactKitchen">Compact kitchen</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="doubleHeightLivingRoom" checked><label class="form-check-label" for="doubleHeightLivingRoom">Double-height living</label></div>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="doubleHeightDiningRoom"><label class="form-check-label" for="doubleHeightDiningRoom">Double-height dining</label></div>
+                            </div>
+                            <div class="form-text" id="doubleHeightHint" hidden>Double-height rooms need at least 2 levels.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SITE -->
+                <section class="panel-section">
+                    <button class="panel-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#plotCollapse"
+                        aria-expanded="true" aria-controls="plotCollapse">
+                        <span><i class="fas fa-map me-2"></i>Site</span><i class="fas fa-chevron-down toggle-icon"></i>
+                    </button>
+                    <div id="plotCollapse" class="collapse show">
+                        <div class="panel-body">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="siteWidth" class="field-label">Plot width</label>
+                                    <div class="input-group input-group-sm"><input type="number" class="form-control" id="siteWidth" value="15" min="8" max="50" step="0.5"><span class="input-group-text">m</span></div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="siteDepth" class="field-label">Plot depth</label>
+                                    <div class="input-group input-group-sm"><input type="number" class="form-control" id="siteDepth" value="30" min="8" max="60" step="0.5"><span class="input-group-text">m</span></div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="field-label" id="levelsLabel">Levels</div>
+                                    <div class="btn-group btn-group-sm w-100 seg" role="group" aria-labelledby="levelsLabel" data-target="maxLevels">
+                                        <input type="radio" class="btn-check" name="levelsPick" id="lvl1" value="1"><label class="btn btn-outline-secondary" for="lvl1">1</label>
+                                        <input type="radio" class="btn-check" name="levelsPick" id="lvl2" value="2" checked><label class="btn btn-outline-secondary" for="lvl2">2</label>
+                                        <input type="radio" class="btn-check" name="levelsPick" id="lvl3" value="3"><label class="btn btn-outline-secondary" for="lvl3">3</label>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch mt-4">
-                                            <input class="form-check-input" type="checkbox" id="guest">
-                                            <label class="form-check-label" for="guest">Guest Room</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="parents">
-                                            <label class="form-check-label" for="parents">Parents Room</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="office" checked>
-                                            <label class="form-check-label" for="office">Office</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="library">
-                                            <label class="form-check-label" for="library">Library</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="spa">
-                                            <label class="form-check-label" for="spa">Spa</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="largeLivingRoom">
-                                            <label class="form-check-label" for="largeLivingRoom">Large Living
-                                                Room</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="doubleHeightLivingRoom"
-                                                checked>
-                                            <label class="form-check-label" for="doubleHeightLivingRoom">Double Height
-                                                Living</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="doubleHeightDiningRoom">
-                                            <label class="form-check-label" for="doubleHeightDiningRoom">Double Height
-                                                Dining</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="compactKitchen">
-                                            <label class="form-check-label" for="compactKitchen">Compact Kitchen</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="garden" checked>
-                                            <label class="form-check-label" for="garden">Garden</label>
-                                        </div>
-                                    </div>
+                                    <input type="hidden" id="maxLevels" value="2">
+                                </div>
+                                <div class="col-6">
+                                    <label for="maxModulesFootprint" class="field-label">Max footprint</label>
+                                    <div class="input-group input-group-sm"><input type="number" class="form-control" id="maxModulesFootprint" value="16" min="4" max="40"><span class="input-group-text">cells</span></div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- PLOT SECTION -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#plotCollapse" aria-expanded="false" aria-controls="plotCollapse">
-                                <i class="fas fa-map me-2"></i>Site Configuration
-                            </button>
-                        </h2>
-                        <div id="plotCollapse" class="accordion-collapse collapse" data-bs-parent="#configAccordion">
-                            <div class="accordion-body">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label for="northAngle" class="form-label">North Angle (degrees)</label>
-                                        <input type="number" class="form-control" id="northAngle" value="220" min="0"
-                                            max="360">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="siteWidth" class="form-label">Site Width (m)</label>
-                                        <input type="number" class="form-control" id="siteWidth" value="15" min="5"
-                                            max="50" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="siteDepth" class="form-label">Site Depth (m)</label>
-                                        <input type="number" class="form-control" id="siteDepth" value="30" min="5"
-                                            max="50" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="maxModulesFootprint" class="form-label">Max Modules
-                                            (footprint)</label>
-                                        <input type="number" class="form-control" id="maxModulesFootprint" value="16"
-                                            min="4" max="30">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="maxModules" class="form-label">Max Modules (total)</label>
-                                        <input type="number" class="form-control" id="maxModules" value="24" min="4"
-                                            max="50">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="maxLevels" class="form-label">Max Levels</label>
-                                        <input type="number" class="form-control" id="maxLevels" value="2" min="1"
-                                            max="4">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="floorHeight" class="form-label">Floor Height (m)</label>
-                                        <input type="number" class="form-control" id="floorHeight" value="3.0" min="2.5"
-                                            max="4.0" step="0.1">
-                                    </div>
+                            <div class="field-label mt-3 d-flex justify-content-between">
+                                <label for="northAngle" class="mb-0">North angle</label><output for="northAngle" id="northOut" class="text-muted">220°</output>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <svg class="mini-compass" viewBox="-12 -12 24 24" aria-hidden="true"><circle r="11"/><g id="miniNorth" transform="rotate(220)"><path d="M0,-9 L3.2,5 L0,2.4 Z" class="fill"/><path d="M0,-9 L-3.2,5 L0,2.4 Z"/></g></svg>
+                                <input type="range" class="form-range" id="northAngle" value="220" min="0" max="359" step="1">
+                            </div>
 
-                                    <!-- Setbacks -->
-                                    <div class="col-12">
-                                        <h6 class="mt-3">Setbacks (m)</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="setbackS" class="form-label">South</label>
-                                        <input type="number" class="form-control" id="setbackS" value="5.0" min="0"
-                                            max="20" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="setbackE" class="form-label">East</label>
-                                        <input type="number" class="form-control" id="setbackE" value="1.5" min="0"
-                                            max="20" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="setbackN" class="form-label">North</label>
-                                        <input type="number" class="form-control" id="setbackN" value="10.0" min="0"
-                                            max="20" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="setbackW" class="form-label">West</label>
-                                        <input type="number" class="form-control" id="setbackW" value="1.5" min="0"
-                                            max="20" step="0.5">
-                                    </div>
+                            <div class="field-label mt-3">Setbacks <span class="text-muted fw-normal">(m)</span></div>
+                            <div class="compass-grid" role="group" aria-label="Setbacks in metres">
+                                <div class="cg-n"><label for="setbackN" class="visually-hidden">North setback</label><span aria-hidden="true">N</span><input type="number" class="form-control form-control-sm" id="setbackN" value="10.0" min="0" max="20" step="0.5"></div>
+                                <div class="cg-w"><label for="setbackW" class="visually-hidden">West setback</label><span aria-hidden="true">W</span><input type="number" class="form-control form-control-sm" id="setbackW" value="1.5" min="0" max="20" step="0.5"></div>
+                                <div class="cg-plot" aria-hidden="true">plot</div>
+                                <div class="cg-e"><label for="setbackE" class="visually-hidden">East setback</label><span aria-hidden="true">E</span><input type="number" class="form-control form-control-sm" id="setbackE" value="1.5" min="0" max="20" step="0.5"></div>
+                                <div class="cg-s"><label for="setbackS" class="visually-hidden">South (street) setback</label><span aria-hidden="true">S</span><input type="number" class="form-control form-control-sm" id="setbackS" value="5.0" min="0" max="20" step="0.5"></div>
+                            </div>
 
-                                    <!-- Access -->
-                                    <div class="col-12">
-                                        <h6 class="mt-3">Site Access</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="accessS" checked>
-                                            <label class="form-check-label" for="accessS">South Access</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="accessE">
-                                            <label class="form-check-label" for="accessE">East Access</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="accessN">
-                                            <label class="form-check-label" for="accessN">North Access</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="accessW">
-                                            <label class="form-check-label" for="accessW">West Access</label>
-                                        </div>
-                                    </div>
+                            <div class="field-label mt-3">Access</div>
+                            <div class="d-flex gap-1 flex-wrap" role="group" aria-label="Site access">
+                                <input type="checkbox" class="btn-check" id="accessS" checked><label class="btn btn-sm btn-outline-secondary" for="accessS">South · street</label>
+                                <input type="checkbox" class="btn-check" id="accessE"><label class="btn btn-sm btn-outline-secondary" for="accessE">East</label>
+                                <input type="checkbox" class="btn-check" id="accessW"><label class="btn btn-sm btn-outline-secondary" for="accessW">West</label>
+                                <input type="checkbox" class="btn-check" id="accessN"><label class="btn btn-sm btn-outline-secondary" for="accessN">North</label>
+                            </div>
 
-                                    <!-- Neighbours Distance -->
-                                    <div class="col-12">
-                                        <h6 class="mt-3">Neighbours Distance (m)</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="neighbourS" class="form-label">South</label>
-                                        <input type="number" class="form-control" id="neighbourS" value="15.0" min="0"
-                                            max="50" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="neighbourE" class="form-label">East</label>
-                                        <input type="number" class="form-control" id="neighbourE" value="10.0" min="0"
-                                            max="50" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="neighbourN" class="form-label">North</label>
-                                        <input type="number" class="form-control" id="neighbourN" value="5.0" min="0"
-                                            max="50" step="0.5">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="neighbourW" class="form-label">West</label>
-                                        <input type="number" class="form-control" id="neighbourW" value="3.0" min="0"
-                                            max="50" step="0.5">
-                                    </div>
+                            <details class="mt-3 more">
+                                <summary class="field-label mb-0">Neighbours and solver settings</summary>
+                                <div class="row g-2 mt-1">
+                                    <div class="col-12 small text-muted">Distance to neighbouring buildings (m)</div>
+                                    <div class="col-3"><label for="neighbourN" class="field-label">N</label><input type="number" class="form-control form-control-sm" id="neighbourN" value="5.0" min="0" max="50" step="0.5"></div>
+                                    <div class="col-3"><label for="neighbourE" class="field-label">E</label><input type="number" class="form-control form-control-sm" id="neighbourE" value="10.0" min="0" max="50" step="0.5"></div>
+                                    <div class="col-3"><label for="neighbourS" class="field-label">S</label><input type="number" class="form-control form-control-sm" id="neighbourS" value="15.0" min="0" max="50" step="0.5"></div>
+                                    <div class="col-3"><label for="neighbourW" class="field-label">W</label><input type="number" class="form-control form-control-sm" id="neighbourW" value="3.0" min="0" max="50" step="0.5"></div>
+                                    <div class="col-12 small text-muted mt-2">Used by the solver service only (<code>?solver=api</code>)</div>
+                                    <div class="col-6"><label for="maxModules" class="field-label">Max modules</label><input type="number" class="form-control form-control-sm" id="maxModules" value="24" min="4" max="50"></div>
+                                    <div class="col-6"><label for="floorHeight" class="field-label">Floor height (m)</label><input type="number" class="form-control form-control-sm" id="floorHeight" value="3.0" min="2.5" max="4.0" step="0.1"></div>
                                 </div>
-                            </div>
+                            </details>
                         </div>
                     </div>
+                </section>
 
-                    <!-- HOUSE SUMMARY (appears after solution available) -->
-                    <div class="accordion-item d-none" id="houseSummaryItem">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#summaryCollapse" aria-expanded="false" aria-controls="summaryCollapse">
-                                <i class="fas fa-info-circle me-2"></i>House Summary
-                            </button>
-                        </h2>
-                        <div id="summaryCollapse" class="accordion-collapse collapse" data-bs-parent="#configAccordion">
-                            <div class="accordion-body">
-                                <div id="houseSummaryContent" class="small text-muted">
-                                    <em>No solution yet.</em>
-                                </div>
-                            </div>
-                        </div>
+                <!-- PROJECT FILES -->
+                <section class="panel-section panel-files">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary flex-fill" id="importProjectBtn">
+                            <i class="fas fa-file-import me-1"></i>Open project
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary flex-fill" id="exportProjectBtn" disabled>
+                            <i class="fas fa-file-export me-1"></i>Save project
+                        </button>
                     </div>
-                </div>
-
-                <!-- FEASIBILITY (ML model, updates live with the form) -->
-                <div class="card border-0 shadow-sm mb-3" id="feasibilityCard" aria-live="polite">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="small text-uppercase fw-bold text-secondary">
-                                <i class="fas fa-chart-line me-1"></i>Feasibility
-                            </span>
-                            <span class="badge rounded-pill text-bg-secondary" id="feasState">Loading model…</span>
-                        </div>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <span class="fs-2 fw-semibold" id="feasProb">–</span>
-                            <span class="small text-muted">chance the solver finds a layout</span>
-                        </div>
-                        <div class="progress mt-1" role="progressbar" aria-label="Feasibility" style="height: 6px;">
-                            <div class="progress-bar bg-secondary" id="feasBar" style="width: 0%"></div>
-                        </div>
-                        <div class="row g-1 small text-muted mt-2 text-center" id="feasStats">
-                            <div class="col-3"><div class="fw-semibold text-dark" id="statModules">–</div>modules</div>
-                            <div class="col-3"><div class="fw-semibold text-dark" id="statArea">–</div>indoor</div>
-                            <div class="col-3"><div class="fw-semibold text-dark" id="statGrid">–</div>grid</div>
-                            <div class="col-3"><div class="fw-semibold text-dark" id="statSlack">–</div>spare cells</div>
-                        </div>
-                        <ul class="small text-muted mt-2 mb-0 ps-3" id="feasNotes"></ul>
-                    </div>
-                </div>
-
-                <!-- CLOSEST SOLVED EXAMPLE (shown after Find Layout) -->
-                <div class="card border-0 shadow-sm mb-3 d-none" id="exampleCard">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small text-uppercase fw-bold text-secondary">
-                                <i class="fas fa-layer-group me-1"></i>Layout
-                            </span>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Browse examples">
-                                <button type="button" class="btn btn-outline-secondary" id="prevExampleBtn" aria-label="Previous example">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary" id="nextExampleBtn" aria-label="Next example">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="small" id="exampleCaption"></div>
-                        <div class="d-flex flex-wrap gap-1 mt-2" id="exampleDiff"></div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 gap-2 flex-wrap">
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Drawing">
-                                <input type="radio" class="btn-check" name="planView" id="viewSite" value="site" checked>
-                                <label class="btn btn-outline-secondary" for="viewSite"><i class="fas fa-map me-1"></i>Site</label>
-                                <input type="radio" class="btn-check" name="planView" id="viewBuilding" value="building">
-                                <label class="btn btn-outline-secondary" for="viewBuilding"><i class="fas fa-ruler-combined me-1"></i>Building</label>
-                            </div>
-                            <div class="form-check form-switch mb-0 small">
-                                <input class="form-check-input" type="checkbox" id="liveUpdate" checked>
-                                <label class="form-check-label" for="liveUpdate">Live update</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-primary" id="solveHouseBtn">
-                        <i class="fas fa-cog me-2"></i>Solve House
-                    </button>
-                    <button type="button" class="btn btn-success" id="generateFloorPlanBtn" disabled>
-                        <i class="fas fa-play me-2"></i>Generate Floor Plan
-                    </button>
-                    <hr class="my-3">
-                    <button type="button" class="btn btn-outline-secondary" id="exportProjectBtn" disabled>
-                        <i class="fas fa-archive me-2"></i>Export Project
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" id="importProjectBtn">
-                        <i class="fas fa-file-import me-2"></i>Import Project
-                    </button>
-                </div>
+                </section>
             </form>
 
             <!-- Hidden file input for importing -->
-            <input type="file" id="projectFileInput" accept=".json" style="display: none;">
-        </div>
+            <input type="file" id="projectFileInput" accept=".json" hidden>
+        </aside>
 
         <!-- MAIN CONTENT AREA -->
-        <div class="flex-grow-1 d-flex flex-column">
-            <!-- Canvas Area Only -->
-            <div class="flex-grow-1 p-2" style="overflow:hidden;">
-                <div class="canvas-container h-100 rounded bg-white d-flex align-items-center justify-content-center"
-                    style="min-height:400px;">
-                    <div id="svgContainer" class="w-100 h-100 d-flex align-items-center justify-content-center">
-                        <div class="text-center text-muted small">
-                            <i class="fas fa-home fa-3x mb-3"></i>
-                            <p class="mb-0">Canvas Ready</p>
-                            <small>Set the brief and site, then Find Layout</small>
+        <main class="flex-grow-1 d-flex flex-column canvas-column">
+            <!-- Layout bar: which example, its rooms, floors and drawing type -->
+            <div class="layout-bar" id="exampleCard">
+                <div class="layout-bar-main">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Browse layouts">
+                        <button type="button" class="btn btn-outline-secondary" id="prevExampleBtn" aria-label="Previous layout"><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" id="nextExampleBtn" aria-label="Next layout"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="layout-caption">
+                        <div class="fw-semibold" id="exampleTitle">Finding a layout…</div>
+                        <div class="small text-muted" id="exampleCaption"></div>
+                    </div>
+                    <dl class="layout-stats mb-0" id="layoutStats"></dl>
+                </div>
+                <div class="layout-bar-sub">
+                    <div class="d-flex flex-wrap gap-1" id="exampleDiff"></div>
+                    <div class="d-flex gap-2 align-items-center ms-auto">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Floor" id="floorPicker"></div>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Drawing">
+                            <input type="radio" class="btn-check" name="planView" id="viewSite" value="site" checked>
+                            <label class="btn btn-outline-secondary" for="viewSite"><i class="fas fa-map me-1"></i>Site</label>
+                            <input type="radio" class="btn-check" name="planView" id="viewBuilding" value="building">
+                            <label class="btn btn-outline-secondary" for="viewBuilding"><i class="fas fa-ruler-combined me-1"></i>Building</label>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="flex-grow-1 p-2 canvas-wrap">
+                <div class="canvas-container h-100 rounded bg-white d-flex align-items-center justify-content-center">
+                    <div id="svgContainer" class="w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div class="text-center text-muted small">
+                            <div class="spinner-border text-secondary mb-3" role="status"><span class="visually-hidden">Loading</span></div>
+                            <p class="mb-0">Loading model and module drawings…</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
     </div> <!-- End main layout container -->
 

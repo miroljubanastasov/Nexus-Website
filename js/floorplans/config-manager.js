@@ -798,6 +798,9 @@ class ConfigManager {
                         throw new Error('Unrecognized project file structure');
                     }
 
+                    // An imported solution is shown as-is: skip the live re-solve that loading the form triggers
+                    this.suppressNextLiveSolve = !!pkg.solution;
+
                     // Load brief/plot into the form if provided
                     if (pkg.brief || pkg.plot) {
                         this.loadConfiguration({ brief: pkg.brief ?? this.generateBriefJson(), plot: pkg.plot ?? this.generatePlotJson() });
@@ -813,8 +816,12 @@ class ConfigManager {
                         this.toggleSolutionExport(true);
                         this.updateHouseSummary(true);
 
-                        // If saved SVGs are included, render them directly without recomputation
-                        if (Array.isArray(pkg.svgs) && pkg.svgs.length > 0) {
+                        window.dispatchEvent(new CustomEvent('nexus:projectImported', { detail: { name: file.name } }));
+                        if (this.solver) {
+                            // In-browser workflow: redraw the imported solution with the plan renderer
+                            this.generateFloorPlanFromSolution();
+                        } else if (Array.isArray(pkg.svgs) && pkg.svgs.length > 0) {
+                            // If saved SVGs are included, render them directly without recomputation
                             this.currentSVGs = pkg.svgs;
                             // Dispatch event to display SVGs via svg-manager in get_flooplan
                             window.dispatchEvent(new CustomEvent('nexus:displaySvgs', { detail: { svgs: this.currentSVGs } }));

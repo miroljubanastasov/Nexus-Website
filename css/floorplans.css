@@ -17,7 +17,7 @@
 
 /* Default styling for legacy Grasshopper SVGs. Plans drawn by
    js/plan/plan-renderer.js (svg.nx-plan) carry their own styles. */
-svg:not(.nx-plan) * {
+svg:not(.nx-plan):not(.mini-compass) * {
     stroke: var(--color-ink) !important;
     stroke-width: var(--lw-thin) !important;
     fill: none !important;
@@ -457,35 +457,334 @@ svg:not(.nx-plan) * {
     height: auto;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .sidebar-panel {
-        width: 350px !important;
-    }
+/* ------------------------------------------------------------------ */
+/* App shell: configuration panel + drawing                           */
+/* ------------------------------------------------------------------ */
+:root {
+    --panel-bg: #f6f7f5;
+    --panel-line: #e2e5df;
+    --panel-ink: #22262a;
+    --panel-muted: #6c727a;
+    --panel-accent: #2f6f8f;
+}
+
+body.fp-page {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-shell {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.sidebar-panel {
+    width: 380px !important;
+    flex-shrink: 0;
+    overflow-y: auto;
+    background: var(--panel-bg) !important;
+    box-shadow: none;
+    min-height: 0;
+    color: var(--panel-ink);
+}
+
+.panel-eyebrow,
+.field-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--panel-muted);
+    margin-bottom: 0.35rem;
+    display: block;
+}
+
+/* Result block stays in view while the form scrolls */
+.panel-result {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #ffffff;
+    border-bottom: 1px solid var(--panel-line);
+    padding: 1rem 1.25rem 0.9rem;
+}
+
+.feas-number {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.stat-row dt {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--panel-muted);
+    order: 2;
+}
+
+.stat-row dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-row > div {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.feas-notes {
+    padding-left: 1rem;
+}
+
+.feas-notes li + li {
+    margin-top: 0.15rem;
+}
+
+.panel-section {
+    border-bottom: 1px solid var(--panel-line);
+}
+
+.panel-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: 0;
+    padding: 0.85rem 1.25rem;
+    font-weight: 600;
+    color: var(--panel-ink);
+}
+
+.panel-toggle:focus-visible {
+    outline: 2px solid var(--panel-accent);
+    outline-offset: -2px;
+}
+
+.panel-toggle .toggle-icon {
+    transition: transform 0.2s ease;
+    color: var(--panel-muted);
+}
+
+.panel-toggle[aria-expanded="false"] .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.panel-body {
+    padding: 0 1.25rem 1.1rem;
+}
+
+.panel-files {
+    padding: 0.9rem 1.25rem 1.25rem;
+    border-bottom: 0;
+}
+
+.toggle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 0.75rem;
+}
+
+.toggle-grid .form-check {
+    margin: 0;
+    min-width: 0;
+}
+
+.sidebar-panel .form-check-label,
+.sidebar-panel .form-control,
+.sidebar-panel .btn {
+    font-size: 0.85rem;
+}
+
+.seg .btn {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Setbacks laid out around the plot, the way they sit on site */
+.compass-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    grid-template-areas:
+        ".    n    ."
+        "w    plot e"
+        ".    s    .";
+    gap: 0.35rem;
+    align-items: center;
+}
+
+.compass-grid > div {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.compass-grid > div > span {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--panel-muted);
+    width: 0.8rem;
+}
+
+.cg-n { grid-area: n; }
+.cg-s { grid-area: s; }
+.cg-w { grid-area: w; }
+.cg-e { grid-area: e; }
+
+.cg-plot {
+    grid-area: plot;
+    justify-content: center;
+    height: 3.2rem;
+    border: 1.5px dashed var(--panel-accent);
+    border-radius: 3px;
+    background: #eef1e8;
+    color: var(--panel-muted);
+    font-size: 0.72rem;
+}
+
+.mini-compass {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.mini-compass circle {
+    fill: #ffffff;
+    stroke: var(--panel-ink);
+    stroke-width: 1;
+}
+
+.mini-compass path {
+    fill: #ffffff !important;
+    stroke: var(--panel-ink) !important;
+    stroke-width: 0.8 !important;
+}
+
+.mini-compass path.fill {
+    fill: var(--panel-ink) !important;
+}
+
+.mini-compass * {
+    pointer-events: none;
+}
+
+details.more summary {
+    cursor: pointer;
+}
+
+/* Layout bar above the drawing */
+.canvas-column {
+    min-width: 0;
+    min-height: 0;
+}
+
+.layout-bar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--panel-line);
+    padding: 0.65rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.layout-bar-main,
+.layout-bar-sub {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.layout-caption {
+    min-width: 0;
+    flex: 1 1 14rem;
+}
+
+.layout-stats {
+    display: flex;
+    gap: 1.1rem;
+}
+
+.layout-stats div {
+    text-align: right;
+}
+
+.layout-stats dt {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--panel-muted);
+}
+
+.layout-stats dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.canvas-wrap {
+    overflow: hidden;
+    min-height: 0;
+    background: var(--panel-bg);
+}
+
+.canvas-container {
+    min-height: 0;
+}
+
+/* Floors are picked in the layout bar; hide the old edge arrows */
+.level-nav-btn,
+.carousel-nav {
+    display: none !important;
 }
 
 @media (max-width: 992px) {
     .sidebar-panel {
-        width: 300px !important;
-    }
-
-    .sidebar-panel .form-control {
-        font-size: 0.8rem;
+        width: 320px !important;
     }
 }
 
 @media (max-width: 768px) {
-    .d-flex {
-        flex-direction: column !important;
+    body.fp-page {
+        height: auto;
+    }
+
+    .app-shell {
+        flex-direction: column;
     }
 
     .sidebar-panel {
         width: 100% !important;
-        min-height: auto;
-        max-height: 50vh;
+        overflow: visible;
+        border-right: 0 !important;
     }
 
-    .canvas-container {
-        min-height: 50vh;
+    .panel-result {
+        position: static;
+    }
+
+    /* result first on phones: drawing, then the controls */
+    .canvas-column {
+        order: -1;
+    }
+
+    .canvas-wrap {
+        height: 62vh;
+        padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+        padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    }
+
+    .layout-stats {
+        width: 100%;
+        justify-content: space-between;
     }
 }

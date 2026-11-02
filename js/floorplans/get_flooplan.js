@@ -234,7 +234,7 @@ async function renderLocally(solutionData, plotData) {
     window.dispatchEvent(new CustomEvent('nexus:svgInit', { detail: { levelsCount } }));
 
     for (const level of levels) {
-        const displayTitle = level === 0 ? 'Ground Floor' : `Level ${level}`;
+        const displayTitle = ['Ground floor', 'First floor', 'Second floor', 'Third floor'][level] ?? `Level ${level}`;
         const svgContent = site
             ? renderSitePlan(lib, house, level, plotData, { title: displayTitle })
             : renderPlan(lib, house, level, { title: displayTitle, plot: plotData });
@@ -306,4 +306,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-export { computeFromSolution, data, loadSvgIntoCarousel };
+/** Show the floor at carousel index i (levels in ascending order). */
+function showLevel(i) {
+    svgManager.loadCarouselLevel(i);
+}
+
+export { computeFromSolution, data, loadSvgIntoCarousel, showLevel };
