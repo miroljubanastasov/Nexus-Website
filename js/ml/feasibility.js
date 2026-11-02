@@ -111,6 +111,27 @@ function countMap(list) {
     return c;
 }
 
+/**
+ * Mirror a house east<->west in place (column c -> cols-1-c). Geometrically,
+ * mirror * R(k) * F(f) = R(-k) * F(!f), so each module and partition keeps its
+ * cell row, gets rotation -k and the opposite flip. North/south (street) stay put.
+ */
+export function mirrorHouse(house, cols) {
+    const flipRot = (k) => (4 - (k % 4)) % 4;
+    for (const m of house.modules ?? []) {
+        m.position = [m.position[0], cols - 1 - m.position[1], m.position[2]];
+        m.rotation = flipRot(m.rotation ?? 0);
+        m.flip = !m.flip;
+        if (m.primary_facade) m.primary_facade = { ...m.primary_facade, E: m.primary_facade.W, W: m.primary_facade.E };
+    }
+    for (const q of house.partitions ?? []) {
+        q.cell = [q.cell[0], cols - 1 - q.cell[1]];
+        q.rotation = flipRot(q.rotation ?? 0);
+        q.flip = !q.flip;
+    }
+    return house;
+}
+
 /* ------------------------------------------------------------------ */
 
 export class FeasibilityModel {
@@ -200,10 +221,16 @@ export class FeasibilityModel {
             const dh = Number(!!brief.DoubleHeightLivingRoom !== e.dhLiving)
                 + Number(!!(brief.DoubleHeightDiningRoom && !brief.CompactKitchen) !== e.dhDining);
             const over = Math.max(0, e.box.h - rows) + Math.max(0, e.box.w - cols);
-            const score = diff * 10 + dh * 12 + over * 60
+            // orientation: layouts solved for a similar north angle face the sun the same way.
+            // Mirroring a layout east<->west serves north angle (360 - n), so take the closer one.
+            const ang = (x) => Math.abs((((x - site.north) % 360) + 540) % 360 - 180);
+            const turnPlain = ang(e.s[3]), turnMirror = ang(360 - e.s[3]);
+            const mirror = turnMirror + 1e-6 < turnPlain;
+            const turn = mirror ? turnMirror : turnPlain;
+            const score = diff * 10 + dh * 12 + over * 60 + turn * 0.06 + (mirror ? 0.5 : 0)
                 + Math.abs(e.usedLevels - Math.min(site.levels, e.s[2])) * 2
                 + Math.abs(e.s[2] - site.levels) * 2 + 0.3 * ((rows - e.box.h) + (cols - e.box.w));
-            return { idx, score, diff, fits: over === 0 };
+            return { idx, score, diff, turn, mirror, fits: over === 0 };
         });
         scored.sort((a, b) => a.score - b.score);
         return { want, top: scored.slice(0, top) };
@@ -230,7 +257,7 @@ export class FeasibilityModel {
      * Solver-style solution for a library example: { house: { grid_shape, grid_size, modules, partitions, summary } }.
      * Uses the stored post-processed house (flip, partitions) when the export includes it.
      */
-    toSolution(idx) {
+    toSolution(idx, mirror = false) {
         const ex = this.library[idx];
         let house;
         const full = ex.h ?? ex.house;   // post-processed drawing data, when exported
@@ -258,6 +285,7 @@ export class FeasibilityModel {
             }
             house = { grid_shape: [ex.g[0], ex.g[1], ex.usedLevels], grid_size: GRID, modules, partitions: [] };
         }
+        if (mirror) mirrorHouse(house, ex.g[1]);
         const mods = house.modules;
         const indoor = mods.filter((m) => m.is_indoor !== false && !OUTDOOR.has(m.type) && m.type !== 'NX_ELE_CON_00');
         house.summary ??= {
@@ -269,7 +297,7 @@ export class FeasibilityModel {
         };
         return {
             house,
-            source: { kind: 'ml-library', index: idx, originalSite: { w: ex.s[0], d: ex.s[1], levels: ex.s[2] }, hasPostProcess: !!(ex.h ?? ex.house) },
+            source: { kind: 'ml-library', index: idx, mirrored: !!mirror, originalSite: { w: ex.s[0], d: ex.s[1], levels: ex.s[2] }, hasPostProcess: !!(ex.h ?? ex.house) },
         };
     }
 }

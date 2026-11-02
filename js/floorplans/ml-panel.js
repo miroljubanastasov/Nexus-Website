@@ -60,7 +60,7 @@ export async function initMlPanel(configManager) {
         const ex = model.library[pick.idx];
         $('exampleTitle').textContent = `Layout ${state.exIndex + 1} of ${top.length}`;
         $('exampleCaption').textContent =
-            `Closest of ${model.size.toLocaleString()} solver layouts · first solved on a ${ex.s[0]} × ${ex.s[1]} m plot`;
+            `Closest of ${model.size.toLocaleString()} solver layouts · solved for a ${ex.s[0]} × ${ex.s[1]} m plot, north ${Math.round(pick.mirror ? (360 - ex.s[3]) % 360 : ex.s[3])}°${pick.mirror ? ' (mirrored east–west)' : ''}`;
         const diffs = model.differences(a.ranked.want, pick.idx, a.brief);
         if (!pick.fits) diffs.unshift({ kind: 'missing', text: `footprint ${ex.box.h} × ${ex.box.w} is larger than the ${a.f.rows} × ${a.f.cols} grid` });
         $('exampleDiff').innerHTML = diffs.length
@@ -113,7 +113,7 @@ export async function initMlPanel(configManager) {
         state.exIndex = Math.min(state.exIndex, a.ranked.top.length - 1);
         const pick = a.ranked.top[state.exIndex];
         renderLayoutBar(a, pick);
-        return { success: true, solution: model.toSolution(pick.idx) };
+        return { success: true, solution: model.toSolution(pick.idx, pick.mirror) };
     }
 
     async function showExample(step) {
@@ -121,7 +121,7 @@ export async function initMlPanel(configManager) {
         const n = state.ranked.ranked.top.length;
         state.exIndex = (state.exIndex + step + n) % n;
         const pick = state.ranked.ranked.top[state.exIndex];
-        configManager.currentSolution = model.toSolution(pick.idx);
+        configManager.currentSolution = model.toSolution(pick.idx, pick.mirror);
         renderLayoutBar(state.ranked, pick);
         await configManager.generateFloorPlanFromSolution();
     }
