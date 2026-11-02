@@ -160,8 +160,26 @@ export class FeasibilityModel {
             if (id === 'NX_ELE_CON_00' && l === 1) voids.add(`${r},${c}`);
             r0 = Math.min(r0, r); r1 = Math.max(r1, r); c0 = Math.min(c0, c); c1 = Math.max(c1, c);
         }
+        // Which outer sides the entrance porch opens to (ground floor, edge of the footprint, no module beyond)
+        const g0 = new Set();
+        let pr = null, gr0 = 1e9, gr1 = -1, gc0 = 1e9, gc1 = -1;
+        for (let i = 0; i < e.m.length; i += 5) {
+            const id = T[e.m[i]], r = e.m[i + 1], c = e.m[i + 2], l = e.m[i + 3];
+            if (l !== 0) continue;
+            g0.add(`${r},${c}`);
+            gr0 = Math.min(gr0, r); gr1 = Math.max(gr1, r); gc0 = Math.min(gc0, c); gc1 = Math.max(gc1, c);
+            if (id === 'NX_ELE_EPO_00') pr = [r, c];
+        }
+        const porchSides = new Set();
+        if (pr) {
+            const [r, c] = pr;
+            if (r === gr1 && !g0.has(`${r + 1},${c}`)) porchSides.add('S');
+            if (r === gr0 && !g0.has(`${r - 1},${c}`)) porchSides.add('N');
+            if (c === gc1 && !g0.has(`${r},${c + 1}`)) porchSides.add('E');
+            if (c === gc0 && !g0.has(`${r},${c - 1}`)) porchSides.add('W');
+        }
         return {
-            ...e, counts, usedLevels: maxL + 1,
+            ...e, counts, usedLevels: maxL + 1, porchSides,
             dhLiving: voids.has(at['NX_ELE_LIV_00@0']), dhDining: voids.has(at['NX_ELE_DIN_00@0']),
             box: { r0, c0, h: r1 - r0 + 1, w: c1 - c0 + 1 },
         };
@@ -234,10 +252,13 @@ export class FeasibilityModel {
                 const ex = { S: aS, N: aN, E: mirror ? aW : aE, W: mirror ? aE : aW };
                 for (const k of ['S', 'N', 'E', 'W']) access += Number(!!ex[k] !== !!site.access[k]);
             }
-            const score = diff * 10 + dh * 12 + over * 60 + turn * 0.06 + access * 4 + (mirror ? 0.5 : 0)
+            // the entrance porch must open to a side with access (the street is south); mirroring swaps E/W
+            const swap = { E: 'W', W: 'E' };
+            const porchOk = !e.porchSides.size || [...e.porchSides].some((k) => site.access[mirror ? (swap[k] ?? k) : k]);
+            const score = diff * 10 + dh * 12 + over * 60 + turn * 0.06 + access * 4 + (porchOk ? 0 : 40) + (mirror ? 0.5 : 0)
                 + Math.abs(e.usedLevels - Math.min(site.levels, e.s[2])) * 2
                 + Math.abs(e.s[2] - site.levels) * 2 + 0.3 * ((rows - e.box.h) + (cols - e.box.w));
-            return { idx, score, diff, turn, mirror, access, fits: over === 0 };
+            return { idx, score, diff, turn, mirror, access, porchOk, fits: over === 0 };
         });
         scored.sort((a, b) => a.score - b.score);
         return { want, top: scored.slice(0, top) };
